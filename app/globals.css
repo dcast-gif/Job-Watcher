@@ -108,3 +108,32 @@ button:hover {
   padding: 8px 12px;
   font-size: 14px;
 }
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+th {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+td a {
+  color: #111827;
+  font-weight: 700;
+}

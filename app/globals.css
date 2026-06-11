@@ -137,3 +137,53 @@ td a {
   color: #111827;
   font-weight: 700;
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #020617;
+    color: #e5e7eb;
+  }
+
+  .card,
+  .nav a {
+    background: #0f172a;
+    color: #e5e7eb;
+    border-color: #1e293b;
+  }
+
+  input {
+    background: #020617;
+    color: #e5e7eb;
+    border-color: #334155;
+  }
+
+  input::placeholder {
+    color: #94a3b8;
+  }
+
+  button {
+    background: #e5e7eb;
+    color: #020617;
+  }
+
+  button:hover {
+    background: #cbd5e1;
+  }
+
+  .listItem {
+    border-color: #1e293b;
+  }
+
+  th,
+  td {
+    border-bottom-color: #1e293b;
+  }
+
+  th {
+    color: #94a3b8;
+  }
+
+  td a {
+    color: #e5e7eb;
+  }
+}

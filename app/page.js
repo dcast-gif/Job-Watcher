@@ -7,10 +7,15 @@ export default function HomePage() {
   const [websiteInput, setWebsiteInput] = useState("");
   const [terms, setTerms] = useState([]);
   const [websites, setWebsites] = useState([]);
+  const [results, setResults] = useState([]);
+  const [auditTrail, setAuditTrail] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
     setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
+    setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
+    setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
   }, []);
 
   function saveTerm() {
@@ -55,6 +60,61 @@ export default function HomePage() {
     localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
   }
 
+  async function runSearch() {
+    if (terms.length === 0 || websites.length === 0) return;
+
+    setIsSearching(true);
+
+    try {
+      const response = await fetch("/api/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          terms,
+          websites
+        })
+      });
+
+      const data = await response.json();
+      const foundResults = data.results || [];
+
+      const previousActiveResults = JSON.parse(
+        localStorage.getItem("jobWatcherActiveResults") || "[]"
+      );
+
+      const previousActiveKeys = previousActiveResults.map(
+        (result) => `${result.term}|${result.website}|${result.url}`
+      );
+
+      const newResults = foundResults.filter((result) => {
+        const key = `${result.term}|${result.website}|${result.url}`;
+        return !previousActiveKeys.includes(key);
+      });
+
+      setResults(newResults);
+      localStorage.setItem("jobWatcherResults", JSON.stringify(newResults));
+
+      const updatedAuditTrail = [...newResults, ...auditTrail];
+      setAuditTrail(updatedAuditTrail);
+      localStorage.setItem(
+        "jobWatcherAuditTrail",
+        JSON.stringify(updatedAuditTrail)
+      );
+
+      localStorage.setItem(
+        "jobWatcherActiveResults",
+        JSON.stringify(foundResults)
+      );
+    } catch (error) {
+      console.error(error);
+      alert("Search failed. Please try again.");
+    } finally {
+      setIsSearching(false);
+    }
+  }
+
   return (
     <main className="container">
       <h1>Job Watcher</h1>
@@ -63,7 +123,8 @@ export default function HomePage() {
         <a href="#main">Main</a>
         <a href="#terms">Terms ({terms.length})</a>
         <a href="#websites">Websites ({websites.length})</a>
-        <a href="#audit">Audit Trail</a>
+        <a href="#results">Latest Results ({results.length})</a>
+        <a href="#audit">Audit Trail ({auditTrail.length})</a>
       </nav>
 
       <section id="main" className="card">
@@ -94,10 +155,15 @@ export default function HomePage() {
 
       <section className="card">
         <h2>Search</h2>
+
         <p>
-          This will eventually search all saved terms across all saved websites.
+          This searches all saved terms across all saved websites. It only logs
+          successful matches that were not active in the previous search.
         </p>
-        <button>Run Search</button>
+
+        <button onClick={runSearch} disabled={isSearching}>
+          {isSearching ? "Searching..." : "Run Search"}
+        </button>
       </section>
 
       <section id="terms" className="card">
@@ -141,9 +207,74 @@ export default function HomePage() {
         )}
       </section>
 
+      <section id="results" className="card">
+        <h2>Latest Results</h2>
+
+        {results.length === 0 ? (
+          <p>No new successful matches from the latest search.</p>
+        ) : (
+          <div className="tableWrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Website</th>
+                  <th>Result</th>
+                  <th>Date Found</th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.map((result, index) => (
+                  <tr key={`${result.term}-${result.url}-${index}`}>
+                    <td>{result.term}</td>
+                    <td>{result.website}</td>
+                    <td>
+                      <a href={result.url} target="_blank">
+                        Open link
+                      </a>
+                    </td>
+                    <td>{new Date(result.foundAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
       <section id="audit" className="card">
         <h2>Audit Trail</h2>
-        <p>No successful matches yet.</p>
+
+        {auditTrail.length === 0 ? (
+          <p>No successful matches yet.</p>
+        ) : (
+          <div className="tableWrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Website</th>
+                  <th>Result</th>
+                  <th>Date Found</th>
+                </tr>
+              </thead>
+              <tbody>
+                {auditTrail.map((result, index) => (
+                  <tr key={`${result.term}-${result.url}-${index}`}>
+                    <td>{result.term}</td>
+                    <td>{result.website}</td>
+                    <td>
+                      <a href={result.url} target="_blank">
+                        Open link
+                      </a>
+                    </td>
+                    <td>{new Date(result.foundAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
     </main>
   );

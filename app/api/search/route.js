@@ -1,3 +1,5 @@
+const MAX_JOB_PAGES_TO_CHECK = 150;
+
 function decodeHtml(value) {
   return value
     .replace(/&amp;/g, "&")
@@ -34,73 +36,77 @@ function locationMatchesText(text, locations) {
   });
 }
 
-function locationMatchesWorkdayUrl(url, locations) {
-  if (!locations || locations.length === 0) return true;
-
-  const normalisedUrl = normalise(url);
-
-  return locations.some((location) => {
-    const normalisedLocation = normalise(location);
-    return normalisedLocation && normalisedUrl.includes(normalisedLocation);
-  });
+function termMatchesText(text, term) {
+  return normalise(text).includes(normalise(term));
 }
 
-function findMatchingLinks(html, baseUrl, term, locations) {
-  const matches = [];
-  const lowerTerm = term.toLowerCase();
+function getPageTitle(html, fallback) {
+  const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+
+  if (titleMatch && titleMatch[1]) {
+    return stripHtml(titleMatch[1]).replace(/\s+/g, " ").trim();
+  }
+
+  const h1Match = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+
+  if (h1Match && h1Match[1]) {
+    return stripHtml(h1Match[1]).replace(/\s+/g, " ").trim();
+  }
+
+  return fallback;
+}
+
+function isLikelyJobUrl(url) {
+  const normalisedUrl = normalise(url);
+
+  return (
+    normalisedUrl.includes("myworkdayjobs com") ||
+    normalisedUrl.includes(" greenhouse io") ||
+    normalisedUrl.includes(" lever co") ||
+    normalisedUrl.includes(" smartrecruiters com") ||
+    normalisedUrl.includes(" workable com") ||
+    normalisedUrl.includes(" bamboohr com") ||
+    normalisedUrl.includes(" ashbyhq com") ||
+    normalisedUrl.includes(" recruitee com") ||
+    normalisedUrl.includes(" job ") ||
+    normalisedUrl.includes(" jobs ") ||
+    normalisedUrl.includes(" careers ")
+  );
+}
+
+function findCandidateJobLinks(html, baseUrl) {
+  const links = [];
+  const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
 
   const anchorRegex = /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
   let anchorMatch;
 
-  while ((anchorMatch = anchorRegex.exec(html)) !== null) {
+  while ((anchorMatch = anchorRegex.exec(decodedHtml)) !== null) {
     const href = anchorMatch[1];
     const anchorText = stripHtml(anchorMatch[2]);
-    const lowerAnchorText = anchorText.toLowerCase();
+    const absoluteUrl = makeAbsoluteUrl(href, baseUrl);
 
-    if (
-      lowerAnchorText.includes(lowerTerm) &&
-      locationMatchesText(anchorText, locations)
-    ) {
-      const absoluteUrl = makeAbsoluteUrl(href, baseUrl);
-
-      if (absoluteUrl) {
-        matches.push({
-          title: anchorText || term,
-          url: absoluteUrl
-        });
-      }
-    }
-  }
-
-  return matches;
-}
-
-function findWorkdayLinks(html, term, locations) {
-  const matches = [];
-  const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
-  const normalisedTerm = normalise(term);
-
-  const workdayUrlRegex =
-    /https?:\/\/[^"'\s<>\\]*myworkdayjobs\.com[^"'\s<>\\]*/gi;
-
-  let match;
-
-  while ((match = workdayUrlRegex.exec(decodedHtml)) !== null) {
-    const url = match[0];
-    const normalisedUrl = normalise(url);
-
-    const termIsInUrl = normalisedUrl.includes(normalisedTerm);
-    const locationIsInUrl = locationMatchesWorkdayUrl(url, locations);
-
-    if (termIsInUrl && locationIsInUrl) {
-      matches.push({
-        title: term,
-        url
+    if (absoluteUrl && isLikelyJobUrl(absoluteUrl)) {
+      links.push({
+        title: anchorText || "Job result",
+        url: absoluteUrl
       });
     }
   }
 
-  return matches;
+  const workdayUrlRegex =
+    /https?:\/\/[^"'\s<>\\]*myworkdayjobs\.com[^"'\s<>\\]*/gi;
+
+  let workdayMatch;
+
+  while ((workdayMatch = workdayUrlRegex.exec(decodedHtml)) !== null) {
+    links.push({
+      title: "Workday job result",
+      url: workdayMatch[0]
+    });
+  }
+
+  return removeDuplicateLinks(links).slice(0, MAX_JOB_PAGES_TO_CHECK);
 }
 
 function removeDuplicateLinks(links) {
@@ -111,6 +117,22 @@ function removeDuplicateLinks(links) {
     seen.add(link.url);
     return true;
   });
+}
+
+async function fetchHtml(url) {
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "JobWatcherBot/1.0"
+    }
+  });
+
+  if (!response.ok) return null;
+
+  const contentType = response.headers.get("content-type") || "";
+
+  if (!contentType.includes("text/html")) return null;
+
+  return response.text();
 }
 
 export async function POST(request) {
@@ -124,47 +146,64 @@ export async function POST(request) {
         ? website
         : `https://${website}`;
 
-      let response;
+      let html;
 
       try {
-        response = await fetch(websiteUrl, {
-          headers: {
-            "User-Agent": "JobWatcherBot/1.0"
-          }
-        });
+        html = await fetchHtml(websiteUrl);
       } catch {
         continue;
       }
 
-      if (!response.ok) continue;
+      if (!html) continue;
 
-      const html = await response.text();
-      const lowerHtml = html.toLowerCase();
+      const candidateJobLinks = findCandidateJobLinks(html, websiteUrl);
 
-      for (const term of terms) {
-        const lowerTerm = term.toLowerCase();
+      for (const candidate of candidateJobLinks) {
+        let jobHtml;
 
-        if (!lowerHtml.includes(lowerTerm)) continue;
+        try {
+          jobHtml = await fetchHtml(candidate.url);
+        } catch {
+          continue;
+        }
 
-        const workdayLinks = findWorkdayLinks(html, term, locations);
-        const matchingLinks = findMatchingLinks(
-          html,
-          websiteUrl,
-          term,
-          locations
-        );
+        if (!jobHtml) continue;
 
-        const linksToUse = removeDuplicateLinks([
-          ...workdayLinks,
-          ...matchingLinks
-        ]);
+        const jobText = stripHtml(jobHtml);
+        const pageTitle = getPageTitle(jobHtml, candidate.title);
 
-        if (linksToUse.length > 0) {
-          for (const link of linksToUse) {
+        for (const term of terms) {
+          const termMatches = termMatchesText(jobText, term);
+          const locationMatches = locationMatchesText(jobText, locations);
+
+          if (termMatches && locationMatches) {
             results.push({
               term,
               website,
-              title: link.title,
+              title: pageTitle || term,
+              url: candidate.url,
+              foundAt: new Date().toISOString()
+            });
+          }
+        }
+      }
+
+      const pageText = stripHtml(html);
+
+      for (const term of terms) {
+        const termMatches = termMatchesText(pageText, term);
+        const locationMatches = locationMatchesText(pageText, locations);
+
+        if (termMatches && locationMatches) {
+          const directLinks = findCandidateJobLinks(html, websiteUrl).filter(
+            (link) => termMatchesText(link.title, term)
+          );
+
+          for (const link of directLinks) {
+            results.push({
+              term,
+              website,
+              title: link.title || term,
               url: link.url,
               foundAt: new Date().toISOString()
             });
@@ -173,7 +212,9 @@ export async function POST(request) {
       }
     }
 
-    return Response.json({ results });
+    return Response.json({
+      results: removeDuplicateLinks(results)
+    });
   } catch (error) {
     return Response.json(
       { error: "Search failed", details: error.message },

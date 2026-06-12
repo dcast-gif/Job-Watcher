@@ -23,7 +23,18 @@ function normalise(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
-function findMatchingLinks(html, baseUrl, term) {
+function locationMatches(text, locations) {
+  if (!locations || locations.length === 0) return true;
+
+  const normalisedText = normalise(text);
+
+  return locations.some((location) => {
+    const normalisedLocation = normalise(location);
+    return normalisedLocation && normalisedText.includes(normalisedLocation);
+  });
+}
+
+function findMatchingLinks(html, baseUrl, term, locations) {
   const matches = [];
   const lowerTerm = term.toLowerCase();
 
@@ -35,7 +46,10 @@ function findMatchingLinks(html, baseUrl, term) {
     const anchorText = stripHtml(anchorMatch[2]);
     const lowerAnchorText = anchorText.toLowerCase();
 
-    if (lowerAnchorText.includes(lowerTerm)) {
+    if (
+      lowerAnchorText.includes(lowerTerm) &&
+      locationMatches(anchorText, locations)
+    ) {
       const absoluteUrl = makeAbsoluteUrl(href, baseUrl);
 
       if (absoluteUrl) {
@@ -50,11 +64,10 @@ function findMatchingLinks(html, baseUrl, term) {
   return matches;
 }
 
-function findWorkdayLinks(html, term) {
+function findWorkdayLinks(html, term, locations) {
   const matches = [];
   const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
   const normalisedTerm = normalise(term);
-  const slugTerm = normalisedTerm.replace(/\s+/g, "-");
 
   const workdayUrlRegex =
     /https?:\/\/[^"'\s<>\\]*myworkdayjobs\.com[^"'\s<>\\]*/gi;
@@ -63,15 +76,15 @@ function findWorkdayLinks(html, term) {
 
   while ((match = workdayUrlRegex.exec(decodedHtml)) !== null) {
     const url = match[0];
-    const start = Math.max(0, match.index - 1500);
-    const end = Math.min(decodedHtml.length, match.index + 1500);
+    const start = Math.max(0, match.index - 2000);
+    const end = Math.min(decodedHtml.length, match.index + 2000);
     const nearbyText = stripHtml(decodedHtml.slice(start, end));
-    const normalisedNearbyText = normalise(nearbyText);
     const normalisedUrl = normalise(url);
 
     const termIsInUrl = normalisedUrl.includes(normalisedTerm);
+    const locationIsNearby = locationMatches(nearbyText, locations);
 
-if (termIsInUrl) {
+    if (termIsInUrl && locationIsNearby) {
       matches.push({
         title: term,
         url
@@ -94,7 +107,7 @@ function removeDuplicateLinks(links) {
 
 export async function POST(request) {
   try {
-    const { terms, websites } = await request.json();
+    const { terms, websites, locations = [] } = await request.json();
 
     const results = [];
 
@@ -125,8 +138,13 @@ export async function POST(request) {
 
         if (!lowerHtml.includes(lowerTerm)) continue;
 
-        const workdayLinks = findWorkdayLinks(html, term);
-        const matchingLinks = findMatchingLinks(html, websiteUrl, term);
+        const workdayLinks = findWorkdayLinks(html, term, locations);
+        const matchingLinks = findMatchingLinks(
+          html,
+          websiteUrl,
+          term,
+          locations
+        );
 
         const linksToUse = removeDuplicateLinks([
           ...workdayLinks,
@@ -143,14 +161,6 @@ export async function POST(request) {
               foundAt: new Date().toISOString()
             });
           }
-        } else {
-          results.push({
-            term,
-            website,
-            title: term,
-            url: websiteUrl,
-            foundAt: new Date().toISOString()
-          });
         }
       }
     }

@@ -198,11 +198,7 @@ async function discoverHarmonicJobLinks(baseUrl) {
 
 const decodedText = decodeHtml(text).replace(/\\\//g, "/");
 
-discovered.push({
-  title: `Probe preview: ${decodedText.slice(0, 5000)}`,
-  url: probeUrl
-});
-
+// Harmonic probe preview disabled
     const urlRegex =
       /https?:\/\/[^"'\s<>\\]+|\/job\/[^"'\s<>\\]+|\/jobs\/[^"'\s<>\\]+/gi;
 
@@ -432,10 +428,6 @@ debug.push({
   totalCandidateLinks: candidateJobLinks.length,
   findings: inspection.findings,
   possibleUrls: inspection.possibleUrls,
-  harmonicPreview:
-    harmonicLinks.find((link) =>
-      link.title.startsWith("Probe preview:")
-    )?.title || "No preview"
 });
       const BATCH_SIZE = 10;
 

@@ -504,9 +504,9 @@ for (let i = 0; i < candidateJobLinks.length; i += BATCH_SIZE) {
   for (const item of fetchedJobs) {
     if (!item.jobHtml) continue;
 
-    const jobText = stripHtml(item.jobHtml);
-    const pageTitle = getPageTitle(item.jobHtml, item.candidate.title);
-
+    const jobText = item.candidate.rawText || stripHtml(item.jobHtml);
+const pageTitle =
+  item.candidate.title || getPageTitle(item.jobHtml, item.candidate.title);
     if (!locationMatchesText(jobText, locations)) continue;
 
     for (const term of terms) {

@@ -431,3 +431,26 @@ select {
 .sideDrawer button:hover {
   background: #f3f4f6;
 }
+@media (prefers-color-scheme: dark) {
+  .sideDrawer {
+    background: #0f172a;
+    color: #e5e7eb;
+    border-color: #1e293b;
+  }
+
+  .drawerHeader {
+    border-bottom-color: #1e293b;
+  }
+
+  .drawerHeader p {
+    color: #94a3b8;
+  }
+
+  .sideDrawer button {
+    color: #e5e7eb;
+  }
+
+  .sideDrawer button:hover {
+    background: #1e293b;
+  }
+}

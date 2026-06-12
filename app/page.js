@@ -19,7 +19,7 @@ export default function HomePage() {
   const [diagnostics, setDiagnostics] = useState([]);
 
   const [isSearching, setIsSearching] = useState(false);
-
+const [showDiagnostics, setShowDiagnostics] = useState(false);
   useEffect(() => {
     setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
     setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
@@ -194,6 +194,12 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
             <button onClick={resetSearchState} style={{ marginTop: "10px" }}>
               Reset Search State
             </button>
+            <button
+  onClick={() => setShowDiagnostics(!showDiagnostics)}
+  style={{ marginTop: "10px" }}
+>
+  {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
+</button>
           </section>
 
           <section className="card">

@@ -659,6 +659,8 @@ function deleteAppliedJob(job) {
               onToggleSaved={toggleSavedJob}
               onApplyJob={applyForJob}
               onUpdateStatus={updateAppliedStatus}
+              onMoveAppliedToSaved={moveAppliedJobToSaved}
+onDeleteApplied={deleteAppliedJob}
               showAppliedFields
             />
           )}
@@ -835,6 +837,8 @@ function ResultsTable({
   onToggleSaved,
   onApplyJob,
   onUpdateStatus,
+  onMoveAppliedToSaved,
+  onDeleteApplied,
   showAppliedFields = false
 }) {
   return (

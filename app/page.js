@@ -210,7 +210,8 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
               <ResultsTable results={results} />
             )}
           </section>
-          <section className="card">
+        {showDiagnostics && (
+<section className="card">
   <h2>Search Diagnostics</h2>
 
   {diagnostics.length === 0 ? (
@@ -233,6 +234,7 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
     </div>
   )}
 </section>
+)}
         </>
       )}
 

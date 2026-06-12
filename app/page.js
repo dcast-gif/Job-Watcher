@@ -9,7 +9,9 @@ export default function HomePage() {
 
   const [termInput, setTermInput] = useState("");
   const [websiteInput, setWebsiteInput] = useState("");
-  const [locationInput, setLocationInput] = useState("");
+const [websiteNicknameInput, setWebsiteNicknameInput] = useState("");
+const [locationInput, setLocationInput] = useState("");
+const [latestResultsOpen, setLatestResultsOpen] = useState(true);
 
   const [terms, setTerms] = useState([]);
   const [websites, setWebsites] = useState([]);
@@ -23,6 +25,9 @@ const [showDiagnostics, setShowDiagnostics] = useState(false);
   useEffect(() => {
     setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
     setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
+    window.jobWatcherWebsiteNames = JSON.parse(
+  localStorage.getItem("jobWatcherWebsiteNames") || "{}"
+);
     setLocations(JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]"));
     setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
     setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));

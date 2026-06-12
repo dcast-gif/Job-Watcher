@@ -17,6 +17,7 @@ export default function HomePage() {
   const [disabledWebsites, setDisabledWebsites] = useState([]);
   const [locations, setLocations] = useState([]);
   const [results, setResults] = useState([]);
+  const [savedJobs, setSavedJobs] = useState([]);
   const [auditTrail, setAuditTrail] = useState([]);
   const [diagnostics, setDiagnostics] = useState([]);
 
@@ -25,39 +26,34 @@ export default function HomePage() {
   const [latestResultsOpen, setLatestResultsOpen] = useState(true);
 
   useEffect(() => {
-  setTerms(
-    JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]")
-      .sort((a, b) => a.localeCompare(b))
-  );
-
-  setWebsites(
-    JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]")
-      .sort((a, b) =>
-        getWebsiteDisplayName(a).localeCompare(getWebsiteDisplayName(b))
+    setTerms(
+      JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]").sort((a, b) =>
+        a.localeCompare(b)
       )
-  );
+    );
 
-  setDisabledWebsites(
-    JSON.parse(localStorage.getItem("jobWatcherDisabledWebsites") || "[]")
-  );
+    setWebsites(
+      JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]").sort(
+        (a, b) => getWebsiteDisplayName(a).localeCompare(getWebsiteDisplayName(b))
+      )
+    );
 
-  setLocations(
-    JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]")
-      .sort((a, b) => a.localeCompare(b))
-  );
+    setDisabledWebsites(
+      JSON.parse(localStorage.getItem("jobWatcherDisabledWebsites") || "[]")
+    );
 
-  setResults(
-    JSON.parse(localStorage.getItem("jobWatcherResults") || "[]")
-  );
+    setLocations(
+      JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]").sort(
+        (a, b) => a.localeCompare(b)
+      )
+    );
 
-  setAuditTrail(
-    JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]")
-  );
+    setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
+    setSavedJobs(JSON.parse(localStorage.getItem("jobWatcherSavedJobs") || "[]"));
+    setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
+    setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
+  }, []);
 
-  setDiagnostics(
-    JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
-  );
-}, []);
   function goToPage(page) {
     setActivePage(page);
     setMenuOpen(false);
@@ -69,17 +65,28 @@ export default function HomePage() {
     setResults([]);
     alert("Search state reset. Next search will treat all matches as new.");
   }
-function clearAuditTrail() {
-  localStorage.removeItem("jobWatcherAuditTrail");
-  setAuditTrail([]);
-}
+
+  function clearAuditTrail() {
+    localStorage.removeItem("jobWatcherAuditTrail");
+    setAuditTrail([]);
+  }
+
+  function toggleSavedJob(job) {
+    const alreadySaved = savedJobs.some((savedJob) => savedJob.url === job.url);
+
+    const updatedSavedJobs = alreadySaved
+      ? savedJobs.filter((savedJob) => savedJob.url !== job.url)
+      : [job, ...savedJobs];
+
+    setSavedJobs(updatedSavedJobs);
+    localStorage.setItem("jobWatcherSavedJobs", JSON.stringify(updatedSavedJobs));
+  }
+
   function saveTerm() {
     const cleanTerm = termInput.trim();
     if (!cleanTerm || terms.includes(cleanTerm)) return;
 
-    const updatedTerms = [...terms, cleanTerm].sort((a, b) =>
-  a.localeCompare(b)
-);
+    const updatedTerms = [...terms, cleanTerm].sort((a, b) => a.localeCompare(b));
     setTerms(updatedTerms);
     localStorage.setItem("jobWatcherTerms", JSON.stringify(updatedTerms));
     setTermInput("");
@@ -96,8 +103,9 @@ function clearAuditTrail() {
     if (websites.includes(cleanWebsite)) return;
 
     const updatedWebsites = [...websites, cleanWebsite].sort((a, b) =>
-  getWebsiteDisplayName(a).localeCompare(getWebsiteDisplayName(b))
-);
+      getWebsiteDisplayName(a).localeCompare(getWebsiteDisplayName(b))
+    );
+
     setWebsites(updatedWebsites);
     localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
 
@@ -117,8 +125,9 @@ function clearAuditTrail() {
     if (!cleanLocation || locations.includes(cleanLocation)) return;
 
     const updatedLocations = [...locations, cleanLocation].sort((a, b) =>
-  a.localeCompare(b)
-);
+      a.localeCompare(b)
+    );
+
     setLocations(updatedLocations);
     localStorage.setItem("jobWatcherLocations", JSON.stringify(updatedLocations));
     setLocationInput("");
@@ -140,36 +149,47 @@ function clearAuditTrail() {
     );
     delete websiteNames[websiteToDelete];
     localStorage.setItem("jobWatcherWebsiteNames", JSON.stringify(websiteNames));
-  }
-function toggleWebsiteDisabled(website) {
-  const updatedDisabledWebsites = disabledWebsites.includes(website)
-    ? disabledWebsites.filter((item) => item !== website)
-    : [...disabledWebsites, website];
 
-  setDisabledWebsites(updatedDisabledWebsites);
-  localStorage.setItem(
-    "jobWatcherDisabledWebsites",
-    JSON.stringify(updatedDisabledWebsites)
-  );
-}
+    const updatedDisabledWebsites = disabledWebsites.filter(
+      (website) => website !== websiteToDelete
+    );
+    setDisabledWebsites(updatedDisabledWebsites);
+    localStorage.setItem(
+      "jobWatcherDisabledWebsites",
+      JSON.stringify(updatedDisabledWebsites)
+    );
+  }
+
+  function toggleWebsiteDisabled(website) {
+    const updatedDisabledWebsites = disabledWebsites.includes(website)
+      ? disabledWebsites.filter((item) => item !== website)
+      : [...disabledWebsites, website];
+
+    setDisabledWebsites(updatedDisabledWebsites);
+    localStorage.setItem(
+      "jobWatcherDisabledWebsites",
+      JSON.stringify(updatedDisabledWebsites)
+    );
+  }
+
   function deleteLocation(locationToDelete) {
-    const updatedLocations = locations.filter((location) => location !== locationToDelete);
+    const updatedLocations = locations.filter(
+      (location) => location !== locationToDelete
+    );
     setLocations(updatedLocations);
     localStorage.setItem("jobWatcherLocations", JSON.stringify(updatedLocations));
   }
 
   async function runSearch() {
-    
     const enabledWebsites = websites.filter(
-  (website) => !disabledWebsites.includes(website)
-);
+      (website) => !disabledWebsites.includes(website)
+    );
 
-if (terms.length === 0 || enabledWebsites.length === 0) return;
+    if (terms.length === 0 || enabledWebsites.length === 0) return;
 
     setIsSearching(true);
 
     try {
-      
       const response = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -177,14 +197,13 @@ if (terms.length === 0 || enabledWebsites.length === 0) return;
       });
 
       const data = await response.json();
-      
-      
-      const debugInfo = data.debug || [];
 
+      const debugInfo = data.debug || [];
       setDiagnostics(debugInfo);
       localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
 
       const foundResults = data.results || [];
+
       const previousActiveResults = JSON.parse(
         localStorage.getItem("jobWatcherActiveResults") || "[]"
       );
@@ -227,6 +246,7 @@ if (terms.length === 0 || enabledWebsites.length === 0) return;
         <nav className="sideMenu">
           <button onClick={() => goToPage("home")}>Home</button>
           <button onClick={() => goToPage("stored")}>Stored Info</button>
+          <button onClick={() => goToPage("saved")}>Saved Jobs</button>
           <button onClick={() => goToPage("audit")}>Audit Trail</button>
         </nav>
       )}
@@ -257,27 +277,31 @@ if (terms.length === 0 || enabledWebsites.length === 0) return;
           </section>
 
           <section className="card">
-          <h2
-  onClick={() => setLatestResultsOpen(!latestResultsOpen)}
-  style={{
-    cursor: "pointer",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center"
-  }}
->
-  <span>Latest Results ({results.length})</span>
+            <h2
+              onClick={() => setLatestResultsOpen(!latestResultsOpen)}
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}
+            >
+              <span>Latest Results ({results.length})</span>
 
-  <span className="toggleBox">
-    {latestResultsOpen ? "⌃" : "⌄"}
-  </span>
-</h2>
+              <span className="toggleBox">
+                {latestResultsOpen ? "⌃" : "⌄"}
+              </span>
+            </h2>
 
             {latestResultsOpen &&
               (results.length === 0 ? (
                 <p>No new successful matches from the latest search.</p>
               ) : (
-                <ResultsTable results={results} />
+                <ResultsTable
+                  results={results}
+                  savedJobs={savedJobs}
+                  onToggleSaved={toggleSavedJob}
+                />
               ))}
           </section>
 
@@ -379,7 +403,7 @@ if (terms.length === 0 || enabledWebsites.length === 0) return;
               emptyMessage="No websites saved yet."
               isWebsiteList
               disabledItems={disabledWebsites}
-onToggleDisabled={toggleWebsiteDisabled}
+              onToggleDisabled={toggleWebsiteDisabled}
             />
           )}
 
@@ -399,20 +423,38 @@ onToggleDisabled={toggleWebsiteDisabled}
         </>
       )}
 
+      {activePage === "saved" && (
+        <section className="card">
+          <h2>Saved Jobs ({savedJobs.length})</h2>
+
+          {savedJobs.length === 0 ? (
+            <p>No saved jobs yet.</p>
+          ) : (
+            <ResultsTable
+              results={savedJobs}
+              savedJobs={savedJobs}
+              onToggleSaved={toggleSavedJob}
+            />
+          )}
+        </section>
+      )}
+
       {activePage === "audit" && (
         <section className="card">
           <h2>Audit Trail ({auditTrail.length})</h2>
-          <button
-  onClick={clearAuditTrail}
-  style={{ marginBottom: "16px" }}
->
-  Clear Audit Trail
-</button>
-     
+
+          <button onClick={clearAuditTrail} style={{ marginBottom: "16px" }}>
+            Clear Audit Trail
+          </button>
+
           {auditTrail.length === 0 ? (
             <p>No successful matches yet.</p>
           ) : (
-            <ResultsTable results={auditTrail} />
+            <ResultsTable
+              results={auditTrail}
+              savedJobs={savedJobs}
+              onToggleSaved={toggleSavedJob}
+            />
           )}
         </section>
       )}
@@ -434,8 +476,8 @@ function StoredList({
   onDelete,
   emptyMessage,
   isWebsiteList = false,
-disabledItems = [],
-onToggleDisabled
+  disabledItems = [],
+  onToggleDisabled
 }) {
   return (
     <section className="card">
@@ -465,27 +507,24 @@ onToggleDisabled
         ) : (
           <div className="list">
             {items.map((item) => (
-          <div className="listItem" key={item}>
-  <span>{isWebsiteList ? getWebsiteDisplayName(item) : item}</span>
+              <div className="listItem" key={item}>
+                <span>{isWebsiteList ? getWebsiteDisplayName(item) : item}</span>
 
-  <div className="buttonGroup">
-    {isWebsiteList && onToggleDisabled && (
-      <button
-        className="smallButton"
-        onClick={() => onToggleDisabled(item)}
-      >
-        {disabledItems.includes(item) ? "Enable" : "Disable"}
-      </button>
-    )}
+                <div className="buttonGroup">
+                  {isWebsiteList && onToggleDisabled && (
+                    <button
+                      className="smallButton"
+                      onClick={() => onToggleDisabled(item)}
+                    >
+                      {disabledItems.includes(item) ? "Enable" : "Disable"}
+                    </button>
+                  )}
 
-    <button
-      className="smallButton"
-      onClick={() => onDelete(item)}
-    >
-      Delete
-    </button>
-  </div>
-</div>
+                  <button className="smallButton" onClick={() => onDelete(item)}>
+                    Delete
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -532,43 +571,59 @@ function getWebsiteDisplayName(website) {
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-function ResultsTable({ results }) {
+function ResultsTable({ results, savedJobs = [], onToggleSaved }) {
   return (
     <div className="resultCards">
-      {results.map((result, index) => (
-        <div className="resultCard" key={`${result.term}-${result.url}-${index}`}>
-          <a
-            className="resultTitle"
-            href={result.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {result.title}
-          </a>
+      {results.map((result, index) => {
+        const isSaved = savedJobs.some((savedJob) => savedJob.url === result.url);
 
-          <div className="resultMeta">
-            <div>
-              <strong>Company</strong>
-              <span>{getWebsiteDisplayName(result.website)}</span>
-            </div>
-{result.salary && (
-  <div>
-    <strong>Salary</strong>
-    <span>{result.salary}</span>
-  </div>
-)}
-            <div>
-           <strong>Job Title</strong>
-              <span>{result.term}</span>
-            </div>
+        return (
+          <div className="resultCard" key={`${result.term}-${result.url}-${index}`}>
+            {onToggleSaved && (
+              <button
+                className="saveJobButton"
+                onClick={() => onToggleSaved(result)}
+                aria-label={isSaved ? "Unsave job" : "Save job"}
+              >
+                {isSaved ? "★" : "☆"}
+              </button>
+            )}
 
-            <div>
-              <strong>Found</strong>
-              <span>{new Date(result.foundAt).toLocaleString()}</span>
+            <a
+              className="resultTitle"
+              href={result.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {result.title}
+            </a>
+
+            <div className="resultMeta">
+              <div>
+                <strong>Company</strong>
+                <span>{getWebsiteDisplayName(result.website)}</span>
+              </div>
+
+              {result.salary && (
+                <div>
+                  <strong>Salary</strong>
+                  <span>{result.salary}</span>
+                </div>
+              )}
+
+              <div>
+                <strong>Job Title</strong>
+                <span>{result.term}</span>
+              </div>
+
+              <div>
+                <strong>Found</strong>
+                <span>{new Date(result.foundAt).toLocaleString()}</span>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

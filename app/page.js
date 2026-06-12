@@ -439,10 +439,7 @@ function ResultsTable({ results }) {
                 </a>
               </td>
               <td>
-                {result.website
-                  .replace(/^https?:\/\//, "")
-                  .replace(/^www\./, "")
-                  .split("/")[0]}
+            {getWebsiteDisplayName(result.website)}
               </td>
               <td>{result.term}</td>
               <td>{new Date(result.foundAt).toLocaleString()}</td>

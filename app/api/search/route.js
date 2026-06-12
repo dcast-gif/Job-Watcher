@@ -428,7 +428,24 @@ async function discoverGreenhouseJobLinks(html, baseUrl) {
 
   return removeDuplicateLinks(discovered);
 }
+function cleanResultTitle(title, term) {
+  const cleaned = stripHtml(title || "")
+    .replace(/&8211;/g, "–")
+    .replace(/&#8211;/g, "–")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
 
+  if (!cleaned || cleaned.toLowerCase() === "job result") {
+    return term;
+  }
+
+  if (cleaned.length > 90) {
+    return `${cleaned.slice(0, 90).trim()}...`;
+  }
+
+  return cleaned;
+}
 export async function POST(request) {
   try {
     const { terms, websites, locations = [] } = await request.json();

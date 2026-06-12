@@ -569,12 +569,12 @@ const pageTitle =
     if (!locationMatchesText(jobText, locations)) continue;
 
     for (const term of terms) {
-      if (termMatchesTitleOrUrl(term, pageTitle, item.candidate.url)) {
+      if (termMatchesTitleOrUrl(term, pageTitle, candidate.url)) {
         results.push({
           term,
           website,
           title: cleanResultTitle(pageTitle || candidate.title, term, candidate.url),
-          url: item.candidate.url,
+          url: candidate.url,
           foundAt: new Date().toISOString()
         });
       }

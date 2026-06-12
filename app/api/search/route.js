@@ -588,9 +588,13 @@ const pageTitle =
   debug
 });
   } catch (error) {
-    return Response.json(
-      { error: "Search failed", details: error.message },
-      { status: 500 }
-    );
-  }
+  console.error(error);
+
+  return Response.json(
+    {
+      error: error.message || "Search failed",
+      stack: error.stack
+    },
+    { status: 500 }
+  );
 }

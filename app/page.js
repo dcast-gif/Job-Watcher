@@ -25,7 +25,7 @@ export default function HomePage() {
   const [isSearching, setIsSearching] = useState(false);
   const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [latestResultsOpen, setLatestResultsOpen] = useState(true);
-
+const [statsOpen, setStatsOpen] = useState(true);
   useEffect(() => {
     setTerms(
       JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]").sort((a, b) =>
@@ -392,9 +392,24 @@ function deleteAppliedJob(job) {
       {activePage === "home" && (
         <>
           <section className="card">
-            <h2>Stats</h2>
+           <h2
+  onClick={() => setStatsOpen(!statsOpen)}
+  style={{
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }}
+>
+  <span>Stats</span>
 
-            <div className="statsGrid">
+  <span className="toggleBox">
+    {statsOpen ? "⌃" : "⌄"}
+  </span>
+</h2>
+
+{statsOpen && (
+  <div className="statsGrid">
               <div>
                 <strong>Latest</strong>
                 <span>{results.length}</span>
@@ -419,13 +434,14 @@ function deleteAppliedJob(job) {
                 <strong>Rejected</strong>
                 <span>{rejectedCount}</span>
               </div>
-              <div>
-                <strong>Offers</strong>
-                <span>{offerCount}</span>
-              </div>
-            </div>
-          </section>
+             <div>
+  <strong>Offers</strong>
+  <span>{offerCount}</span>
+</div>
 
+</div>
+)}
+</section>
           <section className="card">
             <h2>Search</h2>
             <p>

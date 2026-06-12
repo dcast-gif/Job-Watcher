@@ -368,7 +368,12 @@ function StoredList({
           <div className="list">
             {items.map((item) => (
               <div className="listItem" key={item}>
-                <span>{item}</span>
+           <span>
+  {item
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .split("/")[0]}
+</span>
                 <button className="smallButton" onClick={() => onDelete(item)}>
                   Delete
                 </button>

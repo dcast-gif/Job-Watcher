@@ -124,7 +124,40 @@ export default function HomePage() {
     setAppliedJobs(updatedAppliedJobs);
     localStorage.setItem("jobWatcherAppliedJobs", JSON.stringify(updatedAppliedJobs));
   }
+function moveAppliedJobToSaved(job) {
+  const updatedAppliedJobs = appliedJobs.filter(
+    (appliedJob) => appliedJob.url !== job.url
+  );
 
+  const jobToSave = {
+    ...job
+  };
+
+  delete jobToSave.additionalComments;
+  delete jobToSave.appliedAt;
+  delete jobToSave.status;
+
+  const alreadySaved = savedJobs.some((savedJob) => savedJob.url === job.url);
+
+  const updatedSavedJobs = alreadySaved
+    ? savedJobs
+    : [jobToSave, ...savedJobs];
+
+  setAppliedJobs(updatedAppliedJobs);
+  setSavedJobs(updatedSavedJobs);
+
+  localStorage.setItem("jobWatcherAppliedJobs", JSON.stringify(updatedAppliedJobs));
+  localStorage.setItem("jobWatcherSavedJobs", JSON.stringify(updatedSavedJobs));
+}
+
+function deleteAppliedJob(job) {
+  const updatedAppliedJobs = appliedJobs.filter(
+    (appliedJob) => appliedJob.url !== job.url
+  );
+
+  setAppliedJobs(updatedAppliedJobs);
+  localStorage.setItem("jobWatcherAppliedJobs", JSON.stringify(updatedAppliedJobs));
+}
   function exportJobs(jobs, filename) {
     if (jobs.length === 0) {
       alert("No jobs to export.");

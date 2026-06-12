@@ -187,3 +187,14 @@ td a {
     color: #e5e7eb;
   }
 }
+
+@media (max-width: 700px) {
+  table {
+    min-width: 520px;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    display: none;
+  }
+}

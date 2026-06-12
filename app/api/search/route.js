@@ -392,8 +392,7 @@ async function discoverGreenhouseJobLinks(html, baseUrl) {
   const discovered = [];
 
   const boardRegex =
-    /https?:\/\/boards\.greenhouse\.io\/embed\/job_board\?for=([a-zA-Z0-9_-]+)/gi;
-
+  /https?:\/\/boards\.greenhouse\.io\/embed\/job_board(?:\/js)?\?for=([a-zA-Z0-9_-]+)/gi;
   let boardMatch;
 
   while ((boardMatch = boardRegex.exec(decodedHtml)) !== null) {

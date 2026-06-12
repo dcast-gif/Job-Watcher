@@ -169,7 +169,53 @@ function findUrlsInXml(xml, baseUrl) {
 
   return removeDuplicateLinks(urls);
 }
+async function discoverHarmonicJobLinks(baseUrl) {
+  const origin = getOrigin(baseUrl);
 
+  if (!origin.includes("harmonicfinance.com")) {
+    return [];
+  }
+
+  const probeUrls = [
+    `${origin}/job.php`,
+    `${origin}/jobs.php`,
+    `${origin}/wp-admin/admin-ajax.php`
+  ];
+
+  const discovered = [];
+
+  for (const probeUrl of probeUrls) {
+    let text;
+
+    try {
+      text = await fetchText(probeUrl);
+    } catch {
+      continue;
+    }
+
+    if (!text) continue;
+
+    const decodedText = decodeHtml(text).replace(/\\\//g, "/");
+
+    const urlRegex =
+      /https?:\/\/[^"'\s<>\\]+|\/job\/[^"'\s<>\\]+|\/jobs\/[^"'\s<>\\]+/gi;
+
+    let match;
+
+    while ((match = urlRegex.exec(decodedText)) !== null) {
+      const url = makeAbsoluteUrl(match[0], origin);
+
+      if (url && isLikelyJobUrl(url)) {
+        discovered.push({
+          title: "Harmonic job result",
+          url
+        });
+      }
+    }
+  }
+
+  return removeDuplicateLinks(discovered);
+}
 async function discoverSitemapJobLinks(baseUrl) {
   const origin = getOrigin(baseUrl);
 
@@ -347,18 +393,20 @@ const debug = [];
       if (!html) continue;
 
       const pageLinks = findCandidateJobLinks(html, websiteUrl);
-      const sitemapLinks = await discoverSitemapJobLinks(websiteUrl);
-
+const sitemapLinks = await discoverSitemapJobLinks(websiteUrl);
+const harmonicLinks = await discoverHarmonicJobLinks(websiteUrl);
       const candidateJobLinks = removeDuplicateLinks([
-        ...pageLinks,
-        ...sitemapLinks
-      ]).slice(0, MAX_JOB_PAGES_TO_CHECK);
+  ...pageLinks,
+  ...sitemapLinks,
+  ...harmonicLinks
+]).slice(0, MAX_JOB_PAGES_TO_CHECK);
 const inspection = inspectSite(html, websiteUrl);
 
 debug.push({
   website,
   pageLinks: pageLinks.length,
   sitemapLinks: sitemapLinks.length,
+  harmonicLinks: harmonicLinks.length,
   totalCandidateLinks: candidateJobLinks.length,
   findings: inspection.findings,
   possibleUrls: inspection.possibleUrls

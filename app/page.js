@@ -570,7 +570,26 @@ function getWebsiteDisplayName(website) {
     .replace(/-/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
+function timeAgo(dateString) {
+  const now = new Date();
+  const then = new Date(dateString);
 
+  const diffMs = now - then;
+
+  const minutes = Math.floor(diffMs / 60000);
+  const hours = Math.floor(diffMs / 3600000);
+  const days = Math.floor(diffMs / 86400000);
+
+  if (minutes < 60) {
+    return `${minutes} min${minutes === 1 ? "" : "s"} ago`;
+  }
+
+  if (hours < 24) {
+    return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  }
+
+  return `${days} day${days === 1 ? "" : "s"} ago`;
+}
 function ResultsTable({ results, savedJobs = [], onToggleSaved }) {
   return (
     <div className="resultCards">
@@ -616,10 +635,10 @@ function ResultsTable({ results, savedJobs = [], onToggleSaved }) {
                 <span>{result.term}</span>
               </div>
 
-              <div>
-                <strong>Found</strong>
-                <span>{new Date(result.foundAt).toLocaleString()}</span>
-              </div>
+             <div>
+  <strong>Found</strong>
+  <span>{timeAgo(result.foundAt)}</span>
+</div>
             </div>
           </div>
         );

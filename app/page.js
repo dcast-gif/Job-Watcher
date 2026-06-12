@@ -10,9 +10,7 @@ export default function HomePage() {
   const [termInput, setTermInput] = useState("");
   const [websiteInput, setWebsiteInput] = useState("");
   const [websiteNicknameInput, setWebsiteNicknameInput] = useState("");
-const [websiteNicknameInput, setWebsiteNicknameInput] = useState("");
-const [locationInput, setLocationInput] = useState("");
-const [latestResultsOpen, setLatestResultsOpen] = useState(true);
+  const [locationInput, setLocationInput] = useState("");
 
   const [terms, setTerms] = useState([]);
   const [websites, setWebsites] = useState([]);
@@ -22,18 +20,17 @@ const [latestResultsOpen, setLatestResultsOpen] = useState(true);
   const [diagnostics, setDiagnostics] = useState([]);
 
   const [isSearching, setIsSearching] = useState(false);
-const [showDiagnostics, setShowDiagnostics] = useState(false);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
+  const [latestResultsOpen, setLatestResultsOpen] = useState(true);
+
   useEffect(() => {
     setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
     setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
-    window.jobWatcherWebsiteNames = JSON.parse(
-  localStorage.getItem("jobWatcherWebsiteNames") || "{}"
-);
     setLocations(JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]"));
     setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
     setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
-setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
-    }, []);
+    setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
+  }, []);
 
   function goToPage(page) {
     setActivePage(page);
@@ -49,8 +46,7 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
 
   function saveTerm() {
     const cleanTerm = termInput.trim();
-    if (!cleanTerm) return;
-    if (terms.includes(cleanTerm)) return;
+    if (!cleanTerm || terms.includes(cleanTerm)) return;
 
     const updatedTerms = [...terms, cleanTerm];
     setTerms(updatedTerms);
@@ -59,36 +55,33 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
   }
 
   function saveWebsite() {
-  let cleanWebsite = websiteInput.trim();
-  const nickname = websiteNicknameInput.trim();
+    let cleanWebsite = websiteInput.trim();
+    const nickname = websiteNicknameInput.trim();
 
-  if (!cleanWebsite) return;
+    if (!cleanWebsite) return;
 
-  cleanWebsite = cleanWebsite.replace(/^https?:\/\//, "");
-  cleanWebsite = cleanWebsite.replace(/\/$/, "");
+    cleanWebsite = cleanWebsite.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
-  if (websites.includes(cleanWebsite)) return;
+    if (websites.includes(cleanWebsite)) return;
 
-  const updatedWebsites = [...websites, cleanWebsite];
-  setWebsites(updatedWebsites);
-  localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
+    const updatedWebsites = [...websites, cleanWebsite];
+    setWebsites(updatedWebsites);
+    localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
 
-  const websiteNames = JSON.parse(
-    localStorage.getItem("jobWatcherWebsiteNames") || "{}"
-  );
+    const websiteNames = JSON.parse(
+      localStorage.getItem("jobWatcherWebsiteNames") || "{}"
+    );
 
-  websiteNames[cleanWebsite] = nickname || getWebsiteDisplayName(cleanWebsite);
+    websiteNames[cleanWebsite] = nickname || getWebsiteDisplayName(cleanWebsite);
+    localStorage.setItem("jobWatcherWebsiteNames", JSON.stringify(websiteNames));
 
-  localStorage.setItem("jobWatcherWebsiteNames", JSON.stringify(websiteNames));
-
-  setWebsiteInput("");
-  setWebsiteNicknameInput("");
-}
+    setWebsiteInput("");
+    setWebsiteNicknameInput("");
+  }
 
   function saveLocation() {
     const cleanLocation = locationInput.trim();
-    if (!cleanLocation) return;
-    if (locations.includes(cleanLocation)) return;
+    if (!cleanLocation || locations.includes(cleanLocation)) return;
 
     const updatedLocations = [...locations, cleanLocation];
     setLocations(updatedLocations);
@@ -103,17 +96,19 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
   }
 
   function deleteWebsite(websiteToDelete) {
-    const updatedWebsites = websites.filter(
-      (website) => website !== websiteToDelete
-    );
+    const updatedWebsites = websites.filter((website) => website !== websiteToDelete);
     setWebsites(updatedWebsites);
     localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
+
+    const websiteNames = JSON.parse(
+      localStorage.getItem("jobWatcherWebsiteNames") || "{}"
+    );
+    delete websiteNames[websiteToDelete];
+    localStorage.setItem("jobWatcherWebsiteNames", JSON.stringify(websiteNames));
   }
 
   function deleteLocation(locationToDelete) {
-    const updatedLocations = locations.filter(
-      (location) => location !== locationToDelete
-    );
+    const updatedLocations = locations.filter((location) => location !== locationToDelete);
     setLocations(updatedLocations);
     localStorage.setItem("jobWatcherLocations", JSON.stringify(updatedLocations));
   }
@@ -126,24 +121,17 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
     try {
       const response = await fetch("/api/search", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          terms,
-          websites,
-          locations
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ terms, websites, locations })
       });
 
       const data = await response.json();
-      console.log("JOB WATCHER DEBUG", data.debug);
       const debugInfo = data.debug || [];
-      
-setDiagnostics(debugInfo);
-localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
-      const foundResults = data.results || [];
 
+      setDiagnostics(debugInfo);
+      localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
+
+      const foundResults = data.results || [];
       const previousActiveResults = JSON.parse(
         localStorage.getItem("jobWatcherActiveResults") || "[]"
       );
@@ -162,15 +150,9 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
 
       const updatedAuditTrail = [...newResults, ...auditTrail];
       setAuditTrail(updatedAuditTrail);
-      localStorage.setItem(
-        "jobWatcherAuditTrail",
-        JSON.stringify(updatedAuditTrail)
-      );
+      localStorage.setItem("jobWatcherAuditTrail", JSON.stringify(updatedAuditTrail));
 
-      localStorage.setItem(
-        "jobWatcherActiveResults",
-        JSON.stringify(foundResults)
-      );
+      localStorage.setItem("jobWatcherActiveResults", JSON.stringify(foundResults));
     } catch (error) {
       console.error(error);
       alert("Search failed. Please try again.");
@@ -185,7 +167,6 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
         <button className="menuButton" onClick={() => setMenuOpen(!menuOpen)}>
           ☰
         </button>
-
         <h1>Job Watcher</h1>
       </header>
 
@@ -202,8 +183,8 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
           <section className="card">
             <h2>Search</h2>
             <p>
-              Search all saved terms across all saved websites. If location
-              filters are saved, results must also match at least one location.
+              Search all saved terms across all saved websites. If location filters are
+              saved, results must also match at least one location.
             </p>
 
             <button onClick={runSearch} disabled={isSearching}>
@@ -213,76 +194,78 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
             <button onClick={resetSearchState} style={{ marginTop: "10px" }}>
               Reset Search State
             </button>
+
             <button
-  onClick={() => setShowDiagnostics(!showDiagnostics)}
-  style={{ marginTop: "10px" }}
->
-  {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
-</button>
+              onClick={() => setShowDiagnostics(!showDiagnostics)}
+              style={{ marginTop: "10px" }}
+            >
+              {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
+            </button>
           </section>
 
           <section className="card">
-          <h2
-  onClick={() => setLatestResultsOpen(!latestResultsOpen)}
-  style={{ cursor: "pointer" }}
->
-  Latest Results ({results.length}) {latestResultsOpen ? "⌃" : "⌄"}
-</h2>
-           {latestResultsOpen && (
-  results.length === 0 ? (
-    <p>No new successful matches from the latest search.</p>
-  ) : (
-    <ResultsTable results={results} />
-  )
-)}
+            <h2
+              onClick={() => setLatestResultsOpen(!latestResultsOpen)}
+              style={{ cursor: "pointer" }}
+            >
+              Latest Results ({results.length}) {latestResultsOpen ? "⌃" : "⌄"}
+            </h2>
+
+            {latestResultsOpen &&
+              (results.length === 0 ? (
+                <p>No new successful matches from the latest search.</p>
+              ) : (
+                <ResultsTable results={results} />
+              ))}
           </section>
-        {showDiagnostics && (
-<section className="card">
-  <h2>Search Diagnostics</h2>
 
-  {diagnostics.length === 0 ? (
-    <p>No diagnostics yet. Run a search first.</p>
-  ) : (
-    <div className="list">
-      {diagnostics.map((item, index) => (
-        <div className="listItem" key={`${item.website}-${index}`}>
-          <span>
-            <strong>{item.website}</strong>
-            <br />
-Platform: {item.platform || "Unknown"}
-            <br />
-            Page links: {item.pageLinks}
-            <br />
-            Sitemap links: {item.sitemapLinks}
-<br />
-Greenhouse links: {item.greenhouseLinks || 0}
-<br />
-Checked: {item.totalCandidateLinks}
-            <br />
-Findings: {item.findings && item.findings.length > 0 ? item.findings.join(", ") : "None"}
-<br />
-Possible URLs:
-<br />
-{item.possibleUrls && item.possibleUrls.length > 0 ? (
-  item.possibleUrls.map((url) => (
-    <span key={url}>
-      {url}
-      <br />
-    </span>
-  ))
-) : (
-  <span>None</span>
-)}
-<br />
-<br />
+          {showDiagnostics && (
+            <section className="card">
+              <h2>Search Diagnostics</h2>
 
-          </span>
-        </div>
-      ))}
-    </div>
-  )}
-</section>
-)}
+              {diagnostics.length === 0 ? (
+                <p>No diagnostics yet. Run a search first.</p>
+              ) : (
+                <div className="list">
+                  {diagnostics.map((item, index) => (
+                    <div className="listItem" key={`${item.website}-${index}`}>
+                      <span>
+                        <strong>{item.website}</strong>
+                        <br />
+                        Platform: {item.platform || "Unknown"}
+                        <br />
+                        Page links: {item.pageLinks}
+                        <br />
+                        Sitemap links: {item.sitemapLinks}
+                        <br />
+                        Greenhouse links: {item.greenhouseLinks || 0}
+                        <br />
+                        Checked: {item.totalCandidateLinks}
+                        <br />
+                        Findings:{" "}
+                        {item.findings && item.findings.length > 0
+                          ? item.findings.join(", ")
+                          : "None"}
+                        <br />
+                        Possible URLs:
+                        <br />
+                        {item.possibleUrls && item.possibleUrls.length > 0 ? (
+                          item.possibleUrls.map((url) => (
+                            <span key={url}>
+                              {url}
+                              <br />
+                            </span>
+                          ))
+                        ) : (
+                          <span>None</span>
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
         </>
       )}
 
@@ -309,9 +292,6 @@ Possible URLs:
               title="Search Terms"
               inputValue={termInput}
               onInputChange={setTermInput}
-              extraInputValue={websiteNicknameInput}
-onExtraInputChange={setWebsiteNicknameInput}
-extraPlaceholder="Nickname, e.g. Sony Music"
               placeholder="e.g. Management Accountant"
               saveLabel="Save Term"
               onSave={saveTerm}
@@ -326,12 +306,16 @@ extraPlaceholder="Nickname, e.g. Sony Music"
               title="Websites"
               inputValue={websiteInput}
               onInputChange={setWebsiteInput}
+              extraInputValue={websiteNicknameInput}
+              onExtraInputChange={setWebsiteNicknameInput}
+              extraPlaceholder="Nickname, e.g. Sony Music"
               placeholder="e.g. careers.umusic.com"
               saveLabel="Save Website"
               onSave={saveWebsite}
               items={websites}
               onDelete={deleteWebsite}
               emptyMessage="No websites saved yet."
+              isWebsiteList
             />
           )}
 
@@ -369,12 +353,16 @@ function StoredList({
   title,
   inputValue,
   onInputChange,
+  extraInputValue,
+  onExtraInputChange,
+  extraPlaceholder,
   placeholder,
   saveLabel,
   onSave,
   items,
   onDelete,
-  emptyMessage
+  emptyMessage,
+  isWebsiteList = false
 }) {
   return (
     <section className="card">
@@ -387,6 +375,15 @@ function StoredList({
         placeholder={placeholder}
       />
 
+      {onExtraInputChange && (
+        <input
+          type="text"
+          value={extraInputValue}
+          onChange={(event) => onExtraInputChange(event.target.value)}
+          placeholder={extraPlaceholder}
+        />
+      )}
+
       <button onClick={onSave}>{saveLabel}</button>
 
       <div style={{ marginTop: "18px" }}>
@@ -396,12 +393,7 @@ function StoredList({
           <div className="list">
             {items.map((item) => (
               <div className="listItem" key={item}>
-           <span>
-  {item
-    .replace(/^https?:\/\//, "")
-    .replace(/^www\./, "")
-    .split("/")[0]}
-</span>
+                <span>{isWebsiteList ? getWebsiteDisplayName(item) : item}</span>
                 <button className="smallButton" onClick={() => onDelete(item)}>
                   Delete
                 </button>
@@ -413,11 +405,21 @@ function StoredList({
     </section>
   );
 }
+
 function getWebsiteDisplayName(website) {
   const clean = website
     .replace(/^https?:\/\//, "")
     .replace(/^www\./, "")
     .split("/")[0];
+
+  const savedNames =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("jobWatcherWebsiteNames") || "{}")
+      : {};
+
+  if (savedNames[website] || savedNames[clean]) {
+    return savedNames[website] || savedNames[clean];
+  }
 
   const overrides = {
     "sonymusic.co.uk": "Sony Music",
@@ -431,9 +433,7 @@ function getWebsiteDisplayName(website) {
     "umusiccareers.com": "Universal Music"
   };
 
-  if (overrides[clean]) {
-    return overrides[clean];
-  }
+  if (overrides[clean]) return overrides[clean];
 
   const parts = clean.split(".");
   const mainName =
@@ -443,6 +443,7 @@ function getWebsiteDisplayName(website) {
     .replace(/-/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
+
 function ResultsTable({ results }) {
   return (
     <div className="resultCards">

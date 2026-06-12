@@ -226,6 +226,8 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
           <span>
             <strong>{item.website}</strong>
             <br />
+Platform: {item.platform || "Unknown"}
+            <br />
             Page links: {item.pageLinks}
             <br />
             Sitemap links: {item.sitemapLinks}

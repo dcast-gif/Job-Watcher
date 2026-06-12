@@ -93,7 +93,9 @@ function clearAuditTrail() {
     const cleanLocation = locationInput.trim();
     if (!cleanLocation || locations.includes(cleanLocation)) return;
 
-    const updatedLocations = [...locations, cleanLocation];
+    const updatedLocations = [...locations, cleanLocation].sort((a, b) =>
+  a.localeCompare(b)
+);
     setLocations(updatedLocations);
     localStorage.setItem("jobWatcherLocations", JSON.stringify(updatedLocations));
     setLocationInput("");

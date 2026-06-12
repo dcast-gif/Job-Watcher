@@ -349,6 +349,8 @@ if (terms.length === 0 || enabledWebsites.length === 0) return;
               onDelete={deleteWebsite}
               emptyMessage="No websites saved yet."
               isWebsiteList
+              disabledItems={disabledWebsites}
+onToggleDisabled={toggleWebsiteDisabled}
             />
           )}
 

@@ -231,8 +231,10 @@ Platform: {item.platform || "Unknown"}
             Page links: {item.pageLinks}
             <br />
             Sitemap links: {item.sitemapLinks}
-            <br />
-            Checked: {item.totalCandidateLinks}
+<br />
+Greenhouse links: {item.greenhouseLinks || 0}
+<br />
+Checked: {item.totalCandidateLinks}
             <br />
 Findings: {item.findings && item.findings.length > 0 ? item.findings.join(", ") : "None"}
 <br />

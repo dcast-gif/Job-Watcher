@@ -508,6 +508,23 @@ function cleanResultTitle(title, term, url = "") {
 
   return cleaned;
 }
+function extractSalary(text) {
+  const cleaned = stripHtml(text || "");
+
+  const salaryPatterns = [
+    /£\s?\d{2,3}(?:,\d{3})?\s?[-–]\s?£?\s?\d{2,3}(?:,\d{3})?/i,
+    /£\s?\d{2,3}k\s?[-–]\s?£?\s?\d{2,3}k/i,
+    /£\s?\d{2,3}(?:,\d{3})?\s?(?:per annum|annually|a year|pa)/i,
+    /\d{2,3}k\s?[-–]\s?\d{2,3}k/i
+  ];
+
+  for (const pattern of salaryPatterns) {
+    const match = cleaned.match(pattern);
+    if (match) return match[0].replace(/\s+/g, " ").trim();
+  }
+
+  return "";
+}
 export async function POST(request) {
   try {
     const { terms, websites, locations = [] } = await request.json();
@@ -602,6 +619,7 @@ if (!locationMatchesText(locationTextToCheck, locations)) continue;
         term,
         item.candidate.url
       ),
+      salary: extractSalary(jobText),
       url: item.candidate.url,
       foundAt: new Date().toISOString()
     });

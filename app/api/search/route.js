@@ -520,7 +520,15 @@ function extractSalary(text) {
 
   for (const pattern of salaryPatterns) {
     const match = cleaned.match(pattern);
-    if (match) return match[0].replace(/\s+/g, " ").trim();
+    if (match) if (match) {
+  let salary = match[0].replace(/\s+/g, " ").trim();
+
+  salary = salary
+    .replace(/£(\d{2,3})k/gi, "£$1,000")
+    .replace(/-(£?\d{2,3}),000/g, " - $1,000");
+
+  return salary;
+}
   }
 
   return "";

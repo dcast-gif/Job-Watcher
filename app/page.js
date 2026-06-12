@@ -127,6 +127,7 @@ export default function HomePage() {
       });
 
       const data = await response.json();
+      alert("API returned");
       const debugInfo = data.debug || [];
 
       setDiagnostics(debugInfo);

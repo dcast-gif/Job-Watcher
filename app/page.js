@@ -127,6 +127,13 @@ export default function HomePage() {
       });
 
       const data = await response.json();
+      alert(JSON.stringify({
+  ok: response.ok,
+  status: response.status,
+  results: data.results?.length,
+  debug: data.debug?.length,
+  error: data.error
+}));
       alert("API returned");
       const debugInfo = data.debug || [];
 

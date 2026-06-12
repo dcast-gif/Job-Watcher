@@ -429,9 +429,11 @@ async function discoverGreenhouseJobLinks(html, baseUrl) {
   return removeDuplicateLinks(discovered);
 }
 function cleanResultTitle(title, term) {
-  const cleaned = stripHtml(title || "")
+  let cleaned = stripHtml(title || "")
     .replace(/&8211;/g, "–")
     .replace(/&#8211;/g, "–")
+    .replace(/&#8217;/g, "'")
+    .replace(/&8217;/g, "'")
     .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
@@ -440,8 +442,27 @@ function cleanResultTitle(title, term) {
     return term;
   }
 
-  if (cleaned.length > 90) {
-    return `${cleaned.slice(0, 90).trim()}...`;
+  const splitPoints = [
+    "Reporting to",
+    "reporting to",
+    "you will",
+    "You will",
+    "We're",
+    "We’re",
+    "View details",
+    "Apply now"
+  ];
+
+  for (const splitPoint of splitPoints) {
+    const index = cleaned.indexOf(splitPoint);
+
+    if (index > 0) {
+      cleaned = cleaned.slice(0, index).trim();
+    }
+  }
+
+  if (cleaned.length > 100) {
+    cleaned = `${cleaned.slice(0, 100).trim()}...`;
   }
 
   return cleaned;

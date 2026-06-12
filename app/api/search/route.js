@@ -1,4 +1,4 @@
-const MAX_JOB_PAGES_TO_CHECK = 200;
+const MAX_JOB_PAGES_TO_CHECK = 50;
 
 function decodeHtml(value) {
   return value

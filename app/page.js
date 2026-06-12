@@ -119,6 +119,7 @@ export default function HomePage() {
     setIsSearching(true);
 
     try {
+      alert("About to call API");
       const response = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

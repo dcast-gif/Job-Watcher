@@ -363,34 +363,50 @@ debug.push({
   findings: inspection.findings,
   possibleUrls: inspection.possibleUrls
 });
-      for (const candidate of candidateJobLinks) {
-        let jobHtml;
+      const BATCH_SIZE = 10;
 
-        try {
-          jobHtml = await fetchHtml(candidate.url);
-        } catch {
-          continue;
-        }
+for (let i = 0; i < candidateJobLinks.length; i += BATCH_SIZE) {
+  const batch = candidateJobLinks.slice(i, i + BATCH_SIZE);
 
-        if (!jobHtml) continue;
+  const fetchedJobs = await Promise.all(
+    batch.map(async (candidate) => {
+      try {
+        const jobHtml = await fetchHtml(candidate.url);
 
-        const jobText = stripHtml(jobHtml);
-        const pageTitle = getPageTitle(jobHtml, candidate.title);
-
-        if (!locationMatchesText(jobText, locations)) continue;
-
-        for (const term of terms) {
-          if (termMatchesTitleOrUrl(term, pageTitle, candidate.url)) {
-            results.push({
-              term,
-              website,
-              title: pageTitle || candidate.title || term,
-              url: candidate.url,
-              foundAt: new Date().toISOString()
-            });
-          }
-        }
+        return {
+          candidate,
+          jobHtml
+        };
+      } catch {
+        return {
+          candidate,
+          jobHtml: null
+        };
       }
+    })
+  );
+
+  for (const item of fetchedJobs) {
+    if (!item.jobHtml) continue;
+
+    const jobText = stripHtml(item.jobHtml);
+    const pageTitle = getPageTitle(item.jobHtml, item.candidate.title);
+
+    if (!locationMatchesText(jobText, locations)) continue;
+
+    for (const term of terms) {
+      if (termMatchesTitleOrUrl(term, pageTitle, item.candidate.url)) {
+        results.push({
+          term,
+          website,
+          title: pageTitle || item.candidate.title || term,
+          url: item.candidate.url,
+          foundAt: new Date().toISOString()
+        });
+      }
+    }
+  }
+}
     }
 
     return Response.json({

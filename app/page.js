@@ -25,15 +25,39 @@ export default function HomePage() {
   const [latestResultsOpen, setLatestResultsOpen] = useState(true);
 
   useEffect(() => {
-  setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
-  setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
+  setTerms(
+    JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]")
+      .sort((a, b) => a.localeCompare(b))
+  );
+
+  setWebsites(
+    JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]")
+      .sort((a, b) =>
+        getWebsiteDisplayName(a).localeCompare(getWebsiteDisplayName(b))
+      )
+  );
+
   setDisabledWebsites(
-  JSON.parse(localStorage.getItem("jobWatcherDisabledWebsites") || "[]")
-);
-  setLocations(JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]"));
-  setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
-  setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
-  setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
+    JSON.parse(localStorage.getItem("jobWatcherDisabledWebsites") || "[]")
+  );
+
+  setLocations(
+    JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]")
+      .sort((a, b) => a.localeCompare(b))
+  );
+
+  setResults(
+    JSON.parse(localStorage.getItem("jobWatcherResults") || "[]")
+  );
+
+  setAuditTrail(
+    JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]")
+  );
+
+  setDiagnostics(
+    JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
+  );
+}, []);
 }, []);
   function goToPage(page) {
     setActivePage(page);

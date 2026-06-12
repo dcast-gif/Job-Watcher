@@ -309,6 +309,9 @@ Possible URLs:
               title="Search Terms"
               inputValue={termInput}
               onInputChange={setTermInput}
+              extraInputValue={websiteNicknameInput}
+onExtraInputChange={setWebsiteNicknameInput}
+extraPlaceholder="Nickname, e.g. Sony Music"
               placeholder="e.g. Management Accountant"
               saveLabel="Save Term"
               onSave={saveTerm}

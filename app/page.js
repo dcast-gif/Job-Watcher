@@ -416,37 +416,36 @@ function getWebsiteDisplayName(website) {
 }
 function ResultsTable({ results }) {
   return (
-    <div className="tableWrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Result</th>
-            <th>Company</th>
-            <th>Job Title</th>
-            <th>Date Found</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((result, index) => (
-            <tr key={`${result.term}-${result.url}-${index}`}>
-              <td>
-                <a
-                  href={result.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {result.title}
-                </a>
-              </td>
-              <td>
-            {getWebsiteDisplayName(result.website)}
-              </td>
-              <td>{result.term}</td>
-              <td>{new Date(result.foundAt).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="resultCards">
+      {results.map((result, index) => (
+        <div className="resultCard" key={`${result.term}-${result.url}-${index}`}>
+          <a
+            className="resultTitle"
+            href={result.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {result.title}
+          </a>
+
+          <div className="resultMeta">
+            <div>
+              <strong>Company</strong>
+              <span>{getWebsiteDisplayName(result.website)}</span>
+            </div>
+
+            <div>
+              <strong>Search Term</strong>
+              <span>{result.term}</span>
+            </div>
+
+            <div>
+              <strong>Found</strong>
+              <span>{new Date(result.foundAt).toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

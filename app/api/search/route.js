@@ -177,10 +177,11 @@ async function discoverHarmonicJobLinks(baseUrl) {
   }
 
   const probeUrls = [
-    `${origin}/job.php`,
-    `${origin}/jobs.php`,
-    `${origin}/wp-admin/admin-ajax.php`
-  ];
+  `${origin}/job.php`,
+  `${origin}/jobs.php`,
+  `${origin}/wp-admin/admin-ajax.php`,
+  `${origin}/src/script/site.js`
+];
 
   const discovered = [];
 

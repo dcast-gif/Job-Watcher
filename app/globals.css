@@ -312,3 +312,8 @@ td a {
   border-radius: 8px;
   font-size: 20px;
 }
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}

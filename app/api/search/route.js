@@ -23,7 +23,7 @@ function normalise(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
-function locationMatches(text, locations) {
+function locationMatchesText(text, locations) {
   if (!locations || locations.length === 0) return true;
 
   const normalisedText = normalise(text);
@@ -31,6 +31,17 @@ function locationMatches(text, locations) {
   return locations.some((location) => {
     const normalisedLocation = normalise(location);
     return normalisedLocation && normalisedText.includes(normalisedLocation);
+  });
+}
+
+function locationMatchesWorkdayUrl(url, locations) {
+  if (!locations || locations.length === 0) return true;
+
+  const normalisedUrl = normalise(url);
+
+  return locations.some((location) => {
+    const normalisedLocation = normalise(location);
+    return normalisedLocation && normalisedUrl.includes(normalisedLocation);
   });
 }
 
@@ -48,7 +59,7 @@ function findMatchingLinks(html, baseUrl, term, locations) {
 
     if (
       lowerAnchorText.includes(lowerTerm) &&
-      locationMatches(anchorText, locations)
+      locationMatchesText(anchorText, locations)
     ) {
       const absoluteUrl = makeAbsoluteUrl(href, baseUrl);
 
@@ -76,15 +87,12 @@ function findWorkdayLinks(html, term, locations) {
 
   while ((match = workdayUrlRegex.exec(decodedHtml)) !== null) {
     const url = match[0];
-    const start = Math.max(0, match.index - 2000);
-    const end = Math.min(decodedHtml.length, match.index + 2000);
-    const nearbyText = stripHtml(decodedHtml.slice(start, end));
     const normalisedUrl = normalise(url);
 
     const termIsInUrl = normalisedUrl.includes(normalisedTerm);
-    const locationIsNearby = locationMatches(nearbyText, locations);
+    const locationIsInUrl = locationMatchesWorkdayUrl(url, locations);
 
-    if (termIsInUrl && locationIsNearby) {
+    if (termIsInUrl && locationIsInUrl) {
       matches.push({
         title: term,
         url

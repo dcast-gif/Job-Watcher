@@ -228,6 +228,21 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
             Sitemap links: {item.sitemapLinks}
             <br />
             Checked: {item.totalCandidateLinks}
+            <br />
+Findings: {item.findings && item.findings.length > 0 ? item.findings.join(", ") : "None"}
+<br />
+Possible URLs:
+<br />
+{item.possibleUrls && item.possibleUrls.length > 0 ? (
+  item.possibleUrls.map((url) => (
+    <span key={url}>
+      {url}
+      <br />
+    </span>
+  ))
+) : (
+  <span>None</span>
+)}
           </span>
         </div>
       ))}

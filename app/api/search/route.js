@@ -414,7 +414,11 @@ debug.push({
   harmonicLinks: harmonicLinks.length,
   totalCandidateLinks: candidateJobLinks.length,
   findings: inspection.findings,
-  possibleUrls: inspection.possibleUrls
+  possibleUrls: inspection.possibleUrls,
+  harmonicPreview:
+    harmonicLinks.find((link) =>
+      link.title.startsWith("Probe preview:")
+    )?.title || "No preview"
 });
       const BATCH_SIZE = 10;
 

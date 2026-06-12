@@ -209,7 +209,12 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
           </section>
 
           <section className="card">
-            <h2>Latest Results ({results.length})</h2>
+          <h2
+  onClick={() => setLatestResultsOpen(!latestResultsOpen)}
+  style={{ cursor: "pointer" }}
+>
+  Latest Results ({results.length}) {latestResultsOpen ? "⌃" : "⌄"}
+</h2>
             {results.length === 0 ? (
               <p>No new successful matches from the latest search.</p>
             ) : (

@@ -341,6 +341,9 @@ export default function HomePage() {
       {activePage === "audit" && (
         <section className="card">
           <h2>Audit Trail ({auditTrail.length})</h2>
+          <button onClick={clearAuditTrail} style={{ marginBottom: "16px" }}>
+  Clear Audit Trail
+</button>
           {auditTrail.length === 0 ? (
             <p>No successful matches yet.</p>
           ) : (

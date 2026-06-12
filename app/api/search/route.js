@@ -269,7 +269,61 @@ async function fetchHtml(url) {
 
   return response.text();
 }
+function inspectSite(html, baseUrl) {
+  const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
+  const findings = [];
 
+  const patterns = [
+    "wp-json",
+    "/api/",
+    "graphql",
+    "jobs",
+    "vacancies",
+    "recruit",
+    "ajax",
+    "greenhouse",
+    "lever",
+    "workable",
+    "jobadder",
+    "bullhorn",
+    "workday"
+  ];
+
+  for (const pattern of patterns) {
+    const count = decodedHtml.toLowerCase().split(pattern.toLowerCase()).length - 1;
+
+    if (count > 0) {
+      findings.push(`${pattern}: ${count}`);
+    }
+  }
+
+  const urlRegex = /https?:\/\/[^"'\s<>\\]+|\/[^"'\s<>\\]+/gi;
+  const possibleUrls = [];
+  let match;
+
+  while ((match = urlRegex.exec(decodedHtml)) !== null) {
+    const rawUrl = match[0];
+
+    if (
+      rawUrl.toLowerCase().includes("job") ||
+      rawUrl.toLowerCase().includes("api") ||
+      rawUrl.toLowerCase().includes("vacanc") ||
+      rawUrl.toLowerCase().includes("recruit") ||
+      rawUrl.toLowerCase().includes("wp-json")
+    ) {
+      const absoluteUrl = makeAbsoluteUrl(rawUrl, baseUrl);
+
+      if (absoluteUrl) {
+        possibleUrls.push(absoluteUrl);
+      }
+    }
+  }
+
+  return {
+    findings,
+    possibleUrls: [...new Set(possibleUrls)].slice(0, 10)
+  };
+}
 export async function POST(request) {
   try {
     const { terms, websites, locations = [] } = await request.json();

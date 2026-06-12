@@ -403,12 +403,25 @@ function getWebsiteDisplayName(website) {
     .replace(/^www\./, "")
     .split("/")[0];
 
-  const parts = clean.split(".");
+  const overrides = {
+    "sonymusic.co.uk": "Sony Music",
+    "markssattin.co.uk": "Marks Sattin",
+    "jobs.goodmanmasson.com": "Goodman Masson",
+    "wmg.wd1.myworkdayjobs.com": "Warner Music Group",
+    "lifeatspotify.com": "Spotify",
+    "saucerecruitment.com": "Sauce Recruitment",
+    "absolute-recruit.com": "Absolute Recruit",
+    "wedorecruitment.com": "We Do Recruitment",
+    "umusiccareers.com": "Universal Music"
+  };
 
+  if (overrides[clean]) {
+    return overrides[clean];
+  }
+
+  const parts = clean.split(".");
   const mainName =
-    parts[0] === "jobs" || parts[0] === "careers"
-      ? parts[1]
-      : parts[0];
+    parts[0] === "jobs" || parts[0] === "careers" ? parts[1] : parts[0];
 
   return mainName
     .replace(/-/g, " ")

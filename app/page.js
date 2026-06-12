@@ -117,6 +117,7 @@ export default function HomePage() {
       });
 
       const data = await response.json();
+      console.log("JOB WATCHER DEBUG", data.debug);
       const foundResults = data.results || [];
 
       const previousActiveResults = JSON.parse(

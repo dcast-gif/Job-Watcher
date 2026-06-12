@@ -42,7 +42,10 @@ export default function HomePage() {
     setResults([]);
     alert("Search state reset. Next search will treat all matches as new.");
   }
-
+function clearAuditTrail() {
+  localStorage.removeItem("jobWatcherAuditTrail");
+  setAuditTrail([]);
+}
   function saveTerm() {
     const cleanTerm = termInput.trim();
     if (!cleanTerm || terms.includes(cleanTerm)) return;
@@ -341,6 +344,12 @@ export default function HomePage() {
       {activePage === "audit" && (
         <section className="card">
           <h2>Audit Trail ({auditTrail.length})</h2>
+          <button
+  onClick={clearAuditTrail}
+  style={{ marginBottom: "16px" }}
+>
+  Clear Audit Trail
+</button>
           <button onClick={clearAuditTrail} style={{ marginBottom: "16px" }}>
   Clear Audit Trail
 </button>

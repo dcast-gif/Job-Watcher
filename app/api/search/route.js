@@ -455,7 +455,12 @@ const debug = [];
       const pageLinks = findCandidateJobLinks(html, websiteUrl);
 const sitemapLinks = await discoverSitemapJobLinks(websiteUrl);
 const harmonicLinks = await discoverHarmonicJobLinks(websiteUrl);
+const greenhouseLinks = await discoverGreenhouseJobLinks(
+  html,
+  websiteUrl
+);
       const candidateJobLinks = removeDuplicateLinks([
+  ...greenhouseLinks,
   ...pageLinks,
   ...sitemapLinks,
   ...harmonicLinks
@@ -468,6 +473,7 @@ debug.push({
   pageLinks: pageLinks.length,
   sitemapLinks: sitemapLinks.length,
   harmonicLinks: harmonicLinks.length,
+  greenhouseLinks: greenhouseLinks.length,
   totalCandidateLinks: candidateJobLinks.length,
   findings: inspection.findings,
   possibleUrls: inspection.possibleUrls,

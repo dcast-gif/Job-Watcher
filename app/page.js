@@ -551,7 +551,12 @@ function ResultsTable({ results }) {
               <strong>Company</strong>
               <span>{getWebsiteDisplayName(result.website)}</span>
             </div>
-
+{result.salary && (
+  <div>
+    <strong>Salary</strong>
+    <span>{result.salary}</span>
+  </div>
+)}
             <div>
            <strong>Job Title</strong>
               <span>{result.term}</span>

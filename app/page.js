@@ -112,7 +112,17 @@ function clearAuditTrail() {
     delete websiteNames[websiteToDelete];
     localStorage.setItem("jobWatcherWebsiteNames", JSON.stringify(websiteNames));
   }
+function toggleWebsiteDisabled(website) {
+  const updatedDisabledWebsites = disabledWebsites.includes(website)
+    ? disabledWebsites.filter((item) => item !== website)
+    : [...disabledWebsites, website];
 
+  setDisabledWebsites(updatedDisabledWebsites);
+  localStorage.setItem(
+    "jobWatcherDisabledWebsites",
+    JSON.stringify(updatedDisabledWebsites)
+  );
+}
   function deleteLocation(locationToDelete) {
     const updatedLocations = locations.filter((location) => location !== locationToDelete);
     setLocations(updatedLocations);
@@ -121,7 +131,11 @@ function clearAuditTrail() {
 
   async function runSearch() {
     
-    if (terms.length === 0 || websites.length === 0) return;
+    const enabledWebsites = websites.filter(
+  (website) => !disabledWebsites.includes(website)
+);
+
+if (terms.length === 0 || enabledWebsites.length === 0) return;
 
     setIsSearching(true);
 
@@ -130,7 +144,7 @@ function clearAuditTrail() {
       const response = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ terms, websites, locations })
+        body: JSON.stringify({ terms, websites: enabledWebsites, locations })
       });
 
       const data = await response.json();

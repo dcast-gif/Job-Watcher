@@ -69,10 +69,9 @@ function findWorkdayLinks(html, term) {
     const normalisedNearbyText = normalise(nearbyText);
     const normalisedUrl = normalise(url);
 
-    const termIsNearby = normalisedNearbyText.includes(normalisedTerm);
-    const termIsInUrl = normalisedUrl.includes(slugTerm.replace(/-/g, " "));
+    const termIsInUrl = normalisedUrl.includes(normalisedTerm);
 
-    if (termIsNearby || termIsInUrl) {
+if (termIsInUrl) {
       matches.push({
         title: term,
         url

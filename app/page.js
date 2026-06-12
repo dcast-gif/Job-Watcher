@@ -241,11 +241,15 @@ function resetSearchState() {
                   <tr key={`${result.term}-${result.url}-${index}`}>
                     <td>{result.term}</td>
                     <td>{result.website}</td>
-                    <td>
-                      <a href={result.url} target="_blank">
-                        Open link
-                      </a>
-                    </td>
+                 <td>
+  <a
+    href={result.url}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {result.title}
+  </a>
+</td>
                     <td>{new Date(result.foundAt).toLocaleString()}</td>
                   </tr>
                 ))}
@@ -276,11 +280,15 @@ function resetSearchState() {
                   <tr key={`${result.term}-${result.url}-${index}`}>
                     <td>{result.term}</td>
                     <td>{result.website}</td>
-                    <td>
-                      <a href={result.url} target="_blank">
-                        Open link
-                      </a>
-                    </td>
+                 <td>
+  <a
+    href={result.url}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {result.title}
+  </a>
+</td>
                     <td>{new Date(result.foundAt).toLocaleString()}</td>
                   </tr>
                 ))}

@@ -404,7 +404,9 @@ function StoredList({
   items,
   onDelete,
   emptyMessage,
-  isWebsiteList = false
+  isWebsiteList = false,
+disabledItems = [],
+onToggleDisabled
 }) {
   return (
     <section className="card">

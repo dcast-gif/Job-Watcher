@@ -250,9 +250,7 @@ Possible URLs:
 )}
 <br />
 <br />
-Probe Preview:
-<br />
-{item.harmonicPreview || "None"}
+
           </span>
         </div>
       ))}

@@ -199,7 +199,7 @@ async function discoverHarmonicJobLinks(baseUrl) {
 const decodedText = decodeHtml(text).replace(/\\\//g, "/");
 
 discovered.push({
-  title: `Probe preview: ${decodedText.slice(0, 10000)}`,
+  title: `Probe preview: ${decodedText.slice(0, 5000)}`,
   url: probeUrl
 });
 

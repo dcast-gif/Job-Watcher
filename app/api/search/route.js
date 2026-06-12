@@ -387,6 +387,49 @@ function inspectSite(html, baseUrl) {
     possibleUrls: [...new Set(possibleUrls)].slice(0, 10)
   };
 }
+async function discoverGreenhouseJobLinks(html, baseUrl) {
+  const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
+  const discovered = [];
+
+  const boardRegex =
+    /https?:\/\/boards\.greenhouse\.io\/embed\/job_board\?for=([a-zA-Z0-9_-]+)/gi;
+
+  let boardMatch;
+
+  while ((boardMatch = boardRegex.exec(decodedHtml)) !== null) {
+    const companyToken = boardMatch[1];
+    const apiUrl = `https://boards-api.greenhouse.io/v1/boards/${companyToken}/jobs?content=true`;
+
+    let data;
+
+    try {
+      const response = await fetch(apiUrl, {
+        headers: {
+          "User-Agent": "JobWatcherBot/1.0"
+        }
+      });
+
+      if (!response.ok) continue;
+
+      data = await response.json();
+    } catch {
+      continue;
+    }
+
+    const jobs = data.jobs || [];
+
+    for (const job of jobs) {
+      discovered.push({
+        title: job.title || "Greenhouse job result",
+        url: job.absolute_url || `https://boards.greenhouse.io/${companyToken}/jobs/${job.id}`,
+        rawText: `${job.title || ""} ${job.location?.name || ""} ${job.content || ""}`
+      });
+    }
+  }
+
+  return removeDuplicateLinks(discovered);
+}
+
 export async function POST(request) {
   try {
     const { terms, websites, locations = [] } = await request.json();

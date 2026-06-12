@@ -122,7 +122,7 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
       console.log("JOB WATCHER DEBUG", data.debug);
       const debugInfo = data.debug || [];
       if (debugInfo.length > 0) {
-  alert(debugInfo[0].possibleUrls.join("\n"));
+  
 }
 setDiagnostics(debugInfo);
 localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));

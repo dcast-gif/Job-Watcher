@@ -19,6 +19,10 @@ function makeAbsoluteUrl(href, baseUrl) {
   }
 }
 
+function normalise(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
 function findMatchingLinks(html, baseUrl, term) {
   const matches = [];
   const lowerTerm = term.toLowerCase();
@@ -44,6 +48,49 @@ function findMatchingLinks(html, baseUrl, term) {
   }
 
   return matches;
+}
+
+function findWorkdayLinks(html, term) {
+  const matches = [];
+  const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
+  const normalisedTerm = normalise(term);
+  const slugTerm = normalisedTerm.replace(/\s+/g, "-");
+
+  const workdayUrlRegex =
+    /https?:\/\/[^"'\s<>\\]*myworkdayjobs\.com[^"'\s<>\\]*/gi;
+
+  let match;
+
+  while ((match = workdayUrlRegex.exec(decodedHtml)) !== null) {
+    const url = match[0];
+    const start = Math.max(0, match.index - 1500);
+    const end = Math.min(decodedHtml.length, match.index + 1500);
+    const nearbyText = stripHtml(decodedHtml.slice(start, end));
+    const normalisedNearbyText = normalise(nearbyText);
+    const normalisedUrl = normalise(url);
+
+    const termIsNearby = normalisedNearbyText.includes(normalisedTerm);
+    const termIsInUrl = normalisedUrl.includes(slugTerm.replace(/-/g, " "));
+
+    if (termIsNearby || termIsInUrl) {
+      matches.push({
+        title: term,
+        url
+      });
+    }
+  }
+
+  return matches;
+}
+
+function removeDuplicateLinks(links) {
+  const seen = new Set();
+
+  return links.filter((link) => {
+    if (seen.has(link.url)) return false;
+    seen.add(link.url);
+    return true;
+  });
 }
 
 export async function POST(request) {
@@ -79,10 +126,16 @@ export async function POST(request) {
 
         if (!lowerHtml.includes(lowerTerm)) continue;
 
+        const workdayLinks = findWorkdayLinks(html, term);
         const matchingLinks = findMatchingLinks(html, websiteUrl, term);
 
-        if (matchingLinks.length > 0) {
-          for (const link of matchingLinks) {
+        const linksToUse = removeDuplicateLinks([
+          ...workdayLinks,
+          ...matchingLinks
+        ]);
+
+        if (linksToUse.length > 0) {
+          for (const link of linksToUse) {
             results.push({
               term,
               website,

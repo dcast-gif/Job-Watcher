@@ -924,7 +924,23 @@ function ResultsTable({
                       <option value="Offer">Offer</option>
                     </select>
                   </div>
+{onMoveAppliedToSaved && (
+  <button
+    style={{ marginTop: "10px" }}
+    onClick={() => onMoveAppliedToSaved(result)}
+  >
+    Move back to Saved
+  </button>
+)}
 
+{onDeleteApplied && (
+  <button
+    style={{ marginTop: "10px" }}
+    onClick={() => onDeleteApplied(result)}
+  >
+    Remove from Applied
+  </button>
+)}
                   {result.additionalComments && (
                     <div>
                       <strong>Additional Comments</strong>

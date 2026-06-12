@@ -573,7 +573,7 @@ const pageTitle =
         results.push({
           term,
           website,
-          title: cleanResultTitle(pageTitle || candidate.title, term),
+          title: cleanResultTitle(pageTitle || candidate.title, term, candidate.url),
           url: item.candidate.url,
           foundAt: new Date().toISOString()
         });

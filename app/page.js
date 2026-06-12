@@ -9,6 +9,7 @@ export default function HomePage() {
 
   const [termInput, setTermInput] = useState("");
   const [websiteInput, setWebsiteInput] = useState("");
+  const [websiteNicknameInput, setWebsiteNicknameInput] = useState("");
 const [websiteNicknameInput, setWebsiteNicknameInput] = useState("");
 const [locationInput, setLocationInput] = useState("");
 const [latestResultsOpen, setLatestResultsOpen] = useState(true);

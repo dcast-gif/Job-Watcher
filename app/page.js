@@ -59,19 +59,31 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
   }
 
   function saveWebsite() {
-    let cleanWebsite = websiteInput.trim();
-    if (!cleanWebsite) return;
+  let cleanWebsite = websiteInput.trim();
+  const nickname = websiteNicknameInput.trim();
 
-    cleanWebsite = cleanWebsite.replace(/^https?:\/\//, "");
-    cleanWebsite = cleanWebsite.replace(/\/$/, "");
+  if (!cleanWebsite) return;
 
-    if (websites.includes(cleanWebsite)) return;
+  cleanWebsite = cleanWebsite.replace(/^https?:\/\//, "");
+  cleanWebsite = cleanWebsite.replace(/\/$/, "");
 
-    const updatedWebsites = [...websites, cleanWebsite];
-    setWebsites(updatedWebsites);
-    localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
-    setWebsiteInput("");
-  }
+  if (websites.includes(cleanWebsite)) return;
+
+  const updatedWebsites = [...websites, cleanWebsite];
+  setWebsites(updatedWebsites);
+  localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
+
+  const websiteNames = JSON.parse(
+    localStorage.getItem("jobWatcherWebsiteNames") || "{}"
+  );
+
+  websiteNames[cleanWebsite] = nickname || getWebsiteDisplayName(cleanWebsite);
+
+  localStorage.setItem("jobWatcherWebsiteNames", JSON.stringify(websiteNames));
+
+  setWebsiteInput("");
+  setWebsiteNicknameInput("");
+}
 
   function saveLocation() {
     const cleanLocation = locationInput.trim();

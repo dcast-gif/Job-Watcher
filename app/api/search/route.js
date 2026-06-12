@@ -69,7 +69,12 @@ function getPageTitle(html, fallback) {
 
 function isRejectedUrl(url) {
   const normalisedUrl = normalise(url);
-
+if (
+  url.includes("markssattin.co.uk") &&
+  !url.includes("/job/")
+) {
+  return true;
+}
   const rejectedWords = [
     "submit job",
     "submit brief",

@@ -302,3 +302,13 @@ td a {
     color: #94a3b8;
   }
 }
+.toggleBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 20px;
+}

@@ -444,7 +444,20 @@ function titleFromUrl(url) {
     return "";
   }
 }
+function extractJobLocation(html) {
+  const text = decodeHtml(html || "");
 
+  const jsonLocationMatch = text.match(/"jobLocation"[\s\S]*?"addressLocality"\s*:\s*"([^"]+)"/i);
+  if (jsonLocationMatch) return jsonLocationMatch[1];
+
+  const localityMatch = text.match(/itemprop=["']addressLocality["'][^>]*>([\s\S]*?)<\/[^>]+>/i);
+  if (localityMatch) return stripHtml(localityMatch[1]);
+
+  const locationLabelMatch = text.match(/Location[\s\S]{0,200}?<\/[^>]+>\s*<[^>]+>([\s\S]*?)<\/[^>]+>/i);
+  if (locationLabelMatch) return stripHtml(locationLabelMatch[1]);
+
+  return "";
+}
 function cleanResultTitle(title, term, url = "") {
   if (url.includes("absolute-recruit.com/job/")) {
     const urlTitle = titleFromUrl(url);

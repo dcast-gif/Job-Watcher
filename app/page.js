@@ -397,7 +397,23 @@ function StoredList({
     </section>
   );
 }
+function getWebsiteDisplayName(website) {
+  const clean = website
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .split("/")[0];
 
+  const parts = clean.split(".");
+
+  const mainName =
+    parts[0] === "jobs" || parts[0] === "careers"
+      ? parts[1]
+      : parts[0];
+
+  return mainName
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
 function ResultsTable({ results }) {
   return (
     <div className="tableWrapper">

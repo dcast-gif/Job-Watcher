@@ -379,7 +379,7 @@ export default function HomePage() {
               inputValue={termInput}
               onInputChange={setTermInput}
               placeholder="e.g. Management Accountant"
-              saveLabel="Save Term"
+              saveLabel="Save Job Title"
               onSave={saveTerm}
               items={terms}
               onDelete={deleteTerm}

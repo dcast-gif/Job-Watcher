@@ -14,6 +14,7 @@ export default function HomePage() {
 
   const [terms, setTerms] = useState([]);
   const [websites, setWebsites] = useState([]);
+  const [disabledWebsites, setDisabledWebsites] = useState([]);
   const [locations, setLocations] = useState([]);
   const [results, setResults] = useState([]);
   const [auditTrail, setAuditTrail] = useState([]);
@@ -26,6 +27,9 @@ export default function HomePage() {
   useEffect(() => {
   setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
   setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
+  setDisabledWebsites(
+  JSON.parse(localStorage.getItem("jobWatcherDisabledWebsites") || "[]")
+);
   setLocations(JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]"));
   setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
   setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));

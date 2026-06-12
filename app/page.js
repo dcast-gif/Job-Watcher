@@ -359,9 +359,7 @@ function clearAuditTrail() {
 >
   Clear Audit Trail
 </button>
-          <button onClick={clearAuditTrail} style={{ marginBottom: "16px" }}>
-  Clear Audit Trail
-</button>
+     
           {auditTrail.length === 0 ? (
             <p>No successful matches yet.</p>
           ) : (

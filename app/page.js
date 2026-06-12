@@ -16,6 +16,7 @@ export default function HomePage() {
   const [locations, setLocations] = useState([]);
   const [results, setResults] = useState([]);
   const [auditTrail, setAuditTrail] = useState([]);
+  const [diagnostics, setDiagnostics] = useState([]);
 
   const [isSearching, setIsSearching] = useState(false);
 
@@ -25,7 +26,8 @@ export default function HomePage() {
     setLocations(JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]"));
     setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
     setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
-  }, []);
+setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
+    }, []);
 
   function goToPage(page) {
     setActivePage(page);
@@ -118,6 +120,9 @@ export default function HomePage() {
 
       const data = await response.json();
       console.log("JOB WATCHER DEBUG", data.debug);
+      const debugInfo = data.debug || [];
+setDiagnostics(debugInfo);
+localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
       const foundResults = data.results || [];
 
       const previousActiveResults = JSON.parse(
@@ -199,6 +204,29 @@ export default function HomePage() {
               <ResultsTable results={results} />
             )}
           </section>
+          <section className="card">
+  <h2>Search Diagnostics</h2>
+
+  {diagnostics.length === 0 ? (
+    <p>No diagnostics yet. Run a search first.</p>
+  ) : (
+    <div className="list">
+      {diagnostics.map((item, index) => (
+        <div className="listItem" key={`${item.website}-${index}`}>
+          <span>
+            <strong>{item.website}</strong>
+            <br />
+            Page links: {item.pageLinks}
+            <br />
+            Sitemap links: {item.sitemapLinks}
+            <br />
+            Checked: {item.totalCandidateLinks}
+          </span>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
         </>
       )}
 

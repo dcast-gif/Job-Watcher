@@ -58,7 +58,6 @@ export default function HomePage() {
     JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
   );
 }, []);
-}, []);
   function goToPage(page) {
     setActivePage(page);
     setMenuOpen(false);

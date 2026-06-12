@@ -24,14 +24,13 @@ export default function HomePage() {
   const [latestResultsOpen, setLatestResultsOpen] = useState(true);
 
   useEffect(() => {
-    setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
-    setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
-    setLocations(JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]"));
-    setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
-    setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
-    setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
-  }, []);
-
+  setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
+  setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
+  setLocations(JSON.parse(localStorage.getItem("jobWatcherLocations") || "[]"));
+  setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
+  setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
+  setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
+}, []);
   function goToPage(page) {
     setActivePage(page);
     setMenuOpen(false);

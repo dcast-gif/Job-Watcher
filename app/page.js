@@ -370,24 +370,25 @@ function deleteAppliedJob(job) {
         <h1>Job Dashboard</h1>
       </header>
 
-     {menuOpen && (
-  <>
-    <div className="menuOverlay" onClick={() => setMenuOpen(false)} />
+   <>
+  <div
+    className={`menuOverlay ${menuOpen ? "menuOverlayOpen" : ""}`}
+    onClick={() => setMenuOpen(false)}
+  />
 
-    <nav className="sideDrawer">
-      <div className="drawerHeader">
-        <h2>Job Dashboard</h2>
-        <p>Your job search hub</p>
-      </div>
+  <nav className={`sideDrawer ${menuOpen ? "sideDrawerOpen" : ""}`}>
+    <div className="drawerHeader">
+      <h2>Job Dashboard</h2>
+      <p>Your job search hub</p>
+    </div>
 
-      <button onClick={() => goToPage("home")}>⌂ Home</button>
-      <button onClick={() => goToPage("stored")}>☰ Stored Info</button>
-      <button onClick={() => goToPage("saved")}>☆ Saved Jobs</button>
-      <button onClick={() => goToPage("applied")}>✓ Applied Jobs</button>
-      <button onClick={() => goToPage("audit")}>▤ Audit Trail</button>
-    </nav>
-  </>
-)}
+    <button onClick={() => goToPage("home")}>⌂ Home</button>
+    <button onClick={() => goToPage("stored")}>☰ Stored Info</button>
+    <button onClick={() => goToPage("saved")}>☆ Saved Jobs</button>
+    <button onClick={() => goToPage("applied")}>✓ Applied Jobs</button>
+    <button onClick={() => goToPage("audit")}>▤ Audit Trail</button>
+  </nav>
+</>
 
       {activePage === "home" && (
         <>

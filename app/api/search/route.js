@@ -1,4 +1,4 @@
-const MAX_JOB_PAGES_TO_CHECK = 150;
+const MAX_JOB_PAGES_TO_CHECK = 200;
 
 function decodeHtml(value) {
   return value
@@ -18,6 +18,14 @@ function makeAbsoluteUrl(href, baseUrl) {
     return new URL(decodeHtml(href), baseUrl).toString();
   } catch {
     return null;
+  }
+}
+
+function getOrigin(url) {
+  try {
+    return new URL(url).origin;
+  } catch {
+    return url;
   }
 }
 
@@ -79,7 +87,9 @@ function isRejectedUrl(url) {
     "terms",
     "login",
     "register",
-    "newsletter"
+    "newsletter",
+    "blog",
+    "news"
   ];
 
   return rejectedWords.some((word) => normalisedUrl.includes(word));
@@ -99,10 +109,7 @@ function isLikelyJobUrl(url) {
   if (normalisedUrl.includes("ashbyhq com")) return true;
   if (normalisedUrl.includes("recruitee com")) return true;
 
-  return (
-    normalisedUrl.includes(" job ") ||
-    normalisedUrl.includes(" jobs ")
-  );
+  return normalisedUrl.includes(" job ") || normalisedUrl.includes(" jobs ");
 }
 
 function findCandidateJobLinks(html, baseUrl) {
@@ -141,7 +148,88 @@ function findCandidateJobLinks(html, baseUrl) {
     }
   }
 
-  return removeDuplicateLinks(links).slice(0, MAX_JOB_PAGES_TO_CHECK);
+  return removeDuplicateLinks(links);
+}
+
+function findUrlsInXml(xml, baseUrl) {
+  const urls = [];
+  const locRegex = /<loc>([\s\S]*?)<\/loc>/gi;
+  let match;
+
+  while ((match = locRegex.exec(xml)) !== null) {
+    const url = makeAbsoluteUrl(stripHtml(match[1]), baseUrl);
+
+    if (url && isLikelyJobUrl(url)) {
+      urls.push({
+        title: "Job result",
+        url
+      });
+    }
+  }
+
+  return removeDuplicateLinks(urls);
+}
+
+async function discoverSitemapJobLinks(baseUrl) {
+  const origin = getOrigin(baseUrl);
+
+  const sitemapUrls = [
+    `${origin}/sitemap.xml`,
+    `${origin}/sitemap_index.xml`,
+    `${origin}/job-sitemap.xml`,
+    `${origin}/jobs-sitemap.xml`,
+    `${origin}/post-sitemap.xml`,
+    `${origin}/page-sitemap.xml`
+  ];
+
+  const discovered = [];
+
+  for (const sitemapUrl of sitemapUrls) {
+    let xml;
+
+    try {
+      xml = await fetchText(sitemapUrl);
+    } catch {
+      continue;
+    }
+
+    if (!xml) continue;
+
+    const nestedSitemaps = [];
+    const locRegex = /<loc>([\s\S]*?)<\/loc>/gi;
+    let locMatch;
+
+    while ((locMatch = locRegex.exec(xml)) !== null) {
+      const url = makeAbsoluteUrl(stripHtml(locMatch[1]), sitemapUrl);
+
+      if (!url) continue;
+
+      if (url.includes("sitemap")) {
+        nestedSitemaps.push(url);
+      } else if (isLikelyJobUrl(url)) {
+        discovered.push({
+          title: "Job result",
+          url
+        });
+      }
+    }
+
+    for (const nestedSitemapUrl of nestedSitemaps.slice(0, 10)) {
+      let nestedXml;
+
+      try {
+        nestedXml = await fetchText(nestedSitemapUrl);
+      } catch {
+        continue;
+      }
+
+      if (!nestedXml) continue;
+
+      discovered.push(...findUrlsInXml(nestedXml, nestedSitemapUrl));
+    }
+  }
+
+  return removeDuplicateLinks(discovered);
 }
 
 function removeDuplicateLinks(links) {
@@ -152,6 +240,18 @@ function removeDuplicateLinks(links) {
     seen.add(link.url);
     return true;
   });
+}
+
+async function fetchText(url) {
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "JobWatcherBot/1.0"
+    }
+  });
+
+  if (!response.ok) return null;
+
+  return response.text();
 }
 
 async function fetchHtml(url) {
@@ -191,7 +291,13 @@ export async function POST(request) {
 
       if (!html) continue;
 
-      const candidateJobLinks = findCandidateJobLinks(html, websiteUrl);
+      const pageLinks = findCandidateJobLinks(html, websiteUrl);
+      const sitemapLinks = await discoverSitemapJobLinks(websiteUrl);
+
+      const candidateJobLinks = removeDuplicateLinks([
+        ...pageLinks,
+        ...sitemapLinks
+      ]).slice(0, MAX_JOB_PAGES_TO_CHECK);
 
       for (const candidate of candidateJobLinks) {
         let jobHtml;

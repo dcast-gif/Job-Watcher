@@ -321,6 +321,21 @@ async function fetchHtml(url) {
 
   return response.text();
 }
+function detectPlatform(html, possibleUrls) {
+  const combinedText = normalise(`${html} ${possibleUrls.join(" ")}`);
+
+  const platforms = [];
+
+  if (combinedText.includes("myworkdayjobs")) platforms.push("Workday");
+  if (combinedText.includes("greenhouse")) platforms.push("Greenhouse");
+  if (combinedText.includes("jobadder")) platforms.push("JobAdder");
+  if (combinedText.includes("wp job manager")) platforms.push("WP Job Manager");
+  if (combinedText.includes("lever co")) platforms.push("Lever");
+  if (combinedText.includes("smartrecruiters")) platforms.push("SmartRecruiters");
+  if (combinedText.includes("workable")) platforms.push("Workable");
+
+  return platforms.length > 0 ? platforms.join(", ") : "Unknown";
+}
 function inspectSite(html, baseUrl) {
   const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
   const findings = [];
@@ -410,6 +425,7 @@ const inspection = inspectSite(html, websiteUrl);
 
 debug.push({
   website,
+  platform: detectPlatform(html, inspection.possibleUrls),
   pageLinks: pageLinks.length,
   sitemapLinks: sitemapLinks.length,
   harmonicLinks: harmonicLinks.length,

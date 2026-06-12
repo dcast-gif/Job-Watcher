@@ -239,7 +239,7 @@ export default function HomePage() {
         <button className="menuButton" onClick={() => setMenuOpen(!menuOpen)}>
           ☰
         </button>
-        <h1>Job Watcher</h1>
+        <h1>Job Dashboard</h1>
       </header>
 
       {menuOpen && (

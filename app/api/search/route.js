@@ -275,6 +275,7 @@ export async function POST(request) {
     const { terms, websites, locations = [] } = await request.json();
 
     const results = [];
+const debug = [];
 
     for (const website of websites) {
       const websiteUrl = website.startsWith("http")
@@ -298,7 +299,12 @@ export async function POST(request) {
         ...pageLinks,
         ...sitemapLinks
       ]).slice(0, MAX_JOB_PAGES_TO_CHECK);
-
+debug.push({
+  website,
+  pageLinks: pageLinks.length,
+  sitemapLinks: sitemapLinks.length,
+  totalCandidateLinks: candidateJobLinks.length
+});
       for (const candidate of candidateJobLinks) {
         let jobHtml;
 
@@ -330,8 +336,9 @@ export async function POST(request) {
     }
 
     return Response.json({
-      results: removeDuplicateLinks(results)
-    });
+  results: removeDuplicateLinks(results),
+  debug
+});
   } catch (error) {
     return Response.json(
       { error: "Search failed", details: error.message },

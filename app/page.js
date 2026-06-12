@@ -121,7 +121,9 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
       const data = await response.json();
       console.log("JOB WATCHER DEBUG", data.debug);
       const debugInfo = data.debug || [];
-      alert(JSON.stringify(debugInfo.find((item) => item.website.includes("harmonic")), null, 2));
+      if (debugInfo.length > 0) {
+  alert(debugInfo[0].possibleUrls.join("\n"));
+}
 setDiagnostics(debugInfo);
 localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
       const foundResults = data.results || [];

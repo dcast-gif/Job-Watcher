@@ -121,6 +121,7 @@ setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]")
       const data = await response.json();
       console.log("JOB WATCHER DEBUG", data.debug);
       const debugInfo = data.debug || [];
+      alert(JSON.stringify(debugInfo[1], null, 2));
 setDiagnostics(debugInfo);
 localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
       const foundResults = data.results || [];

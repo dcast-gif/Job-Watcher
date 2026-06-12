@@ -18,6 +18,7 @@ export default function HomePage() {
   const [locations, setLocations] = useState([]);
   const [results, setResults] = useState([]);
   const [savedJobs, setSavedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
   const [auditTrail, setAuditTrail] = useState([]);
   const [diagnostics, setDiagnostics] = useState([]);
 
@@ -50,6 +51,7 @@ export default function HomePage() {
 
     setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
     setSavedJobs(JSON.parse(localStorage.getItem("jobWatcherSavedJobs") || "[]"));
+    setAppliedJobs(JSON.parse(localStorage.getItem("jobWatcherAppliedJobs") || "[]"));
     setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
     setDiagnostics(JSON.parse(localStorage.getItem("jobWatcherDiagnostics") || "[]"));
   }, []);
@@ -80,6 +82,94 @@ export default function HomePage() {
 
     setSavedJobs(updatedSavedJobs);
     localStorage.setItem("jobWatcherSavedJobs", JSON.stringify(updatedSavedJobs));
+  }
+
+  function applyForJob(job) {
+    const alreadyApplied = appliedJobs.some((appliedJob) => appliedJob.url === job.url);
+
+    if (alreadyApplied) {
+      alert("This job is already in Applied Jobs.");
+      return;
+    }
+
+    const comments = window.prompt("Additional Comments", "");
+
+    if (comments === null) return;
+
+    const appliedJob = {
+      ...job,
+      additionalComments: comments.trim(),
+      appliedAt: new Date().toISOString(),
+      status: "Applied"
+    };
+
+    const updatedAppliedJobs = [appliedJob, ...appliedJobs];
+    const updatedSavedJobs = savedJobs.filter((savedJob) => savedJob.url !== job.url);
+    const updatedResults = results.filter((result) => result.url !== job.url);
+
+    setAppliedJobs(updatedAppliedJobs);
+    setSavedJobs(updatedSavedJobs);
+    setResults(updatedResults);
+
+    localStorage.setItem("jobWatcherAppliedJobs", JSON.stringify(updatedAppliedJobs));
+    localStorage.setItem("jobWatcherSavedJobs", JSON.stringify(updatedSavedJobs));
+    localStorage.setItem("jobWatcherResults", JSON.stringify(updatedResults));
+  }
+
+  function updateAppliedStatus(job, newStatus) {
+    const updatedAppliedJobs = appliedJobs.map((appliedJob) =>
+      appliedJob.url === job.url ? { ...appliedJob, status: newStatus } : appliedJob
+    );
+
+    setAppliedJobs(updatedAppliedJobs);
+    localStorage.setItem("jobWatcherAppliedJobs", JSON.stringify(updatedAppliedJobs));
+  }
+
+  function exportJobs(jobs, filename) {
+    if (jobs.length === 0) {
+      alert("No jobs to export.");
+      return;
+    }
+
+    const headers = [
+      "Title",
+      "Company",
+      "Salary",
+      "Job Title",
+      "Status",
+      "Found",
+      "Applied",
+      "Additional Comments",
+      "URL"
+    ];
+
+    const rows = jobs.map((job) => [
+      job.title || "",
+      getWebsiteDisplayName(job.website || ""),
+      job.salary || "",
+      job.term || "",
+      job.status || "",
+      job.foundAt || "",
+      job.appliedAt || "",
+      job.additionalComments || "",
+      job.url || ""
+    ]);
+
+    const csv = [headers, ...rows]
+      .map((row) =>
+        row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(",")
+      )
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = filename;
+    link.click();
+
+    URL.revokeObjectURL(url);
   }
 
   function saveTerm() {
@@ -233,6 +323,11 @@ export default function HomePage() {
     }
   }
 
+  const interviewCount = appliedJobs.filter((job) => job.status === "Interview").length;
+  const finalStageCount = appliedJobs.filter((job) => job.status === "Final Stage").length;
+  const rejectedCount = appliedJobs.filter((job) => job.status === "Rejected").length;
+  const offerCount = appliedJobs.filter((job) => job.status === "Offer").length;
+
   return (
     <main className="container">
       <header className="topBar">
@@ -247,12 +342,48 @@ export default function HomePage() {
           <button onClick={() => goToPage("home")}>Home</button>
           <button onClick={() => goToPage("stored")}>Stored Info</button>
           <button onClick={() => goToPage("saved")}>Saved Jobs</button>
+          <button onClick={() => goToPage("applied")}>Applied Jobs</button>
           <button onClick={() => goToPage("audit")}>Audit Trail</button>
         </nav>
       )}
 
       {activePage === "home" && (
         <>
+          <section className="card">
+            <h2>Stats</h2>
+
+            <div className="statsGrid">
+              <div>
+                <strong>Latest</strong>
+                <span>{results.length}</span>
+              </div>
+              <div>
+                <strong>Saved</strong>
+                <span>{savedJobs.length}</span>
+              </div>
+              <div>
+                <strong>Applied</strong>
+                <span>{appliedJobs.length}</span>
+              </div>
+              <div>
+                <strong>Interviews</strong>
+                <span>{interviewCount}</span>
+              </div>
+              <div>
+                <strong>Final Stage</strong>
+                <span>{finalStageCount}</span>
+              </div>
+              <div>
+                <strong>Rejected</strong>
+                <span>{rejectedCount}</span>
+              </div>
+              <div>
+                <strong>Offers</strong>
+                <span>{offerCount}</span>
+              </div>
+            </div>
+          </section>
+
           <section className="card">
             <h2>Search</h2>
             <p>
@@ -300,7 +431,9 @@ export default function HomePage() {
                 <ResultsTable
                   results={results}
                   savedJobs={savedJobs}
+                  appliedJobs={appliedJobs}
                   onToggleSaved={toggleSavedJob}
+                  onApplyJob={applyForJob}
                 />
               ))}
           </section>
@@ -427,13 +560,73 @@ export default function HomePage() {
         <section className="card">
           <h2>Saved Jobs ({savedJobs.length})</h2>
 
+          <button
+            onClick={() => exportJobs(savedJobs, "job-dashboard-saved-jobs.csv")}
+            style={{ marginBottom: "10px" }}
+          >
+            Export Saved Jobs
+          </button>
+
+          <button
+            onClick={() =>
+              exportJobs(
+                [...savedJobs, ...appliedJobs],
+                "job-dashboard-saved-and-applied-jobs.csv"
+              )
+            }
+            style={{ marginBottom: "16px" }}
+          >
+            Export Saved + Applied Jobs
+          </button>
+
           {savedJobs.length === 0 ? (
             <p>No saved jobs yet.</p>
           ) : (
             <ResultsTable
               results={savedJobs}
               savedJobs={savedJobs}
+              appliedJobs={appliedJobs}
               onToggleSaved={toggleSavedJob}
+              onApplyJob={applyForJob}
+            />
+          )}
+        </section>
+      )}
+
+      {activePage === "applied" && (
+        <section className="card">
+          <h2>Applied Jobs ({appliedJobs.length})</h2>
+
+          <button
+            onClick={() => exportJobs(appliedJobs, "job-dashboard-applied-jobs.csv")}
+            style={{ marginBottom: "10px" }}
+          >
+            Export Applied Jobs
+          </button>
+
+          <button
+            onClick={() =>
+              exportJobs(
+                [...savedJobs, ...appliedJobs],
+                "job-dashboard-saved-and-applied-jobs.csv"
+              )
+            }
+            style={{ marginBottom: "16px" }}
+          >
+            Export Saved + Applied Jobs
+          </button>
+
+          {appliedJobs.length === 0 ? (
+            <p>No applied jobs yet.</p>
+          ) : (
+            <ResultsTable
+              results={appliedJobs}
+              savedJobs={savedJobs}
+              appliedJobs={appliedJobs}
+              onToggleSaved={toggleSavedJob}
+              onApplyJob={applyForJob}
+              onUpdateStatus={updateAppliedStatus}
+              showAppliedFields
             />
           )}
         </section>
@@ -453,7 +646,9 @@ export default function HomePage() {
             <ResultsTable
               results={auditTrail}
               savedJobs={savedJobs}
+              appliedJobs={appliedJobs}
               onToggleSaved={toggleSavedJob}
+              onApplyJob={applyForJob}
             />
           )}
         </section>
@@ -570,15 +765,19 @@ function getWebsiteDisplayName(website) {
     .replace(/-/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
+
 function timeAgo(dateString) {
+  if (!dateString) return "";
+
   const now = new Date();
   const then = new Date(dateString);
-
   const diffMs = now - then;
 
   const minutes = Math.floor(diffMs / 60000);
   const hours = Math.floor(diffMs / 3600000);
   const days = Math.floor(diffMs / 86400000);
+
+  if (minutes < 1) return "Just now";
 
   if (minutes < 60) {
     return `${minutes} min${minutes === 1 ? "" : "s"} ago`;
@@ -590,15 +789,41 @@ function timeAgo(dateString) {
 
   return `${days} day${days === 1 ? "" : "s"} ago`;
 }
-function ResultsTable({ results, savedJobs = [], onToggleSaved }) {
+
+function formatDate(dateString) {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleString();
+}
+
+function ResultsTable({
+  results,
+  savedJobs = [],
+  appliedJobs = [],
+  onToggleSaved,
+  onApplyJob,
+  onUpdateStatus,
+  showAppliedFields = false
+}) {
   return (
     <div className="resultCards">
       {results.map((result, index) => {
         const isSaved = savedJobs.some((savedJob) => savedJob.url === result.url);
+        const isApplied = appliedJobs.some(
+          (appliedJob) => appliedJob.url === result.url
+        );
 
         return (
           <div className="resultCard" key={`${result.term}-${result.url}-${index}`}>
-            {onToggleSaved && (
+            {onApplyJob && !isApplied && (
+              <button
+                className="applyJobButton"
+                onClick={() => onApplyJob(result)}
+              >
+                Applied
+              </button>
+            )}
+
+            {onToggleSaved && !showAppliedFields && (
               <button
                 className="saveJobButton"
                 onClick={() => onToggleSaved(result)}
@@ -635,10 +860,42 @@ function ResultsTable({ results, savedJobs = [], onToggleSaved }) {
                 <span>{result.term}</span>
               </div>
 
-             <div>
-  <strong>Found</strong>
-  <span>{timeAgo(result.foundAt)}</span>
-</div>
+              <div>
+                <strong>Found</strong>
+                <span>{timeAgo(result.foundAt)}</span>
+              </div>
+
+              {showAppliedFields && (
+                <>
+                  <div>
+                    <strong>Applied</strong>
+                    <span>{formatDate(result.appliedAt)}</span>
+                  </div>
+
+                  <div>
+                    <strong>Status</strong>
+                    <select
+                      value={result.status || "Applied"}
+                      onChange={(event) =>
+                        onUpdateStatus(result, event.target.value)
+                      }
+                    >
+                      <option value="Applied">Applied</option>
+                      <option value="Interview">Interview</option>
+                      <option value="Final Stage">Final Stage</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Offer">Offer</option>
+                    </select>
+                  </div>
+
+                  {result.additionalComments && (
+                    <div>
+                      <strong>Additional Comments</strong>
+                      <span>{result.additionalComments}</span>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         );

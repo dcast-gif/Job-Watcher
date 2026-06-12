@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
+  const [activePage, setActivePage] = useState("home");
+  const [storedTab, setStoredTab] = useState("terms");
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const [termInput, setTermInput] = useState("");
   const [websiteInput, setWebsiteInput] = useState("");
   const [locationInput, setLocationInput] = useState("");
@@ -22,6 +26,11 @@ export default function HomePage() {
     setResults(JSON.parse(localStorage.getItem("jobWatcherResults") || "[]"));
     setAuditTrail(JSON.parse(localStorage.getItem("jobWatcherAuditTrail") || "[]"));
   }, []);
+
+  function goToPage(page) {
+    setActivePage(page);
+    setMenuOpen(false);
+  }
 
   function resetSearchState() {
     localStorage.removeItem("jobWatcherActiveResults");
@@ -147,144 +156,168 @@ export default function HomePage() {
 
   return (
     <main className="container">
-      <h1>Job Watcher</h1>
-
-      <nav className="nav">
-        <a href="#main">Main</a>
-        <a href="#terms">Terms ({terms.length})</a>
-        <a href="#websites">Websites ({websites.length})</a>
-        <a href="#locations">Locations ({locations.length})</a>
-        <a href="#results">Latest Results ({results.length})</a>
-        <a href="#audit">Audit Trail ({auditTrail.length})</a>
-      </nav>
-
-      <section id="main" className="card">
-        <h2>Add Search Term</h2>
-        <input
-          type="text"
-          value={termInput}
-          onChange={(event) => setTermInput(event.target.value)}
-          placeholder="e.g. Management Accountant"
-        />
-        <button onClick={saveTerm}>Save Term</button>
-      </section>
-
-      <section className="card">
-        <h2>Add Website</h2>
-        <input
-          type="text"
-          value={websiteInput}
-          onChange={(event) => setWebsiteInput(event.target.value)}
-          placeholder="e.g. careers.umusic.com"
-        />
-        <button onClick={saveWebsite}>Save Website</button>
-      </section>
-
-      <section className="card">
-        <h2>Add Location Filter</h2>
-        <input
-          type="text"
-          value={locationInput}
-          onChange={(event) => setLocationInput(event.target.value)}
-          placeholder="e.g. London"
-        />
-        <button onClick={saveLocation}>Save Location</button>
-      </section>
-
-      <section className="card">
-        <h2>Search</h2>
-        <p>
-          This searches all saved terms across all saved websites. If location
-          filters are saved, results must also match at least one location.
-        </p>
-
-        <button onClick={runSearch} disabled={isSearching}>
-          {isSearching ? "Searching..." : "Run Search"}
+      <header className="topBar">
+        <button className="menuButton" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
         </button>
 
-        <button onClick={resetSearchState} style={{ marginTop: "10px" }}>
-          Reset Search State
-        </button>
-      </section>
+        <h1>Job Watcher</h1>
+      </header>
 
-      <section id="terms" className="card">
-        <h2>Stored Terms</h2>
-        {terms.length === 0 ? (
-          <p>No terms saved yet.</p>
-        ) : (
-          <div className="list">
-            {terms.map((term) => (
-              <div className="listItem" key={term}>
-                <span>{term}</span>
-                <button className="smallButton" onClick={() => deleteTerm(term)}>
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      {menuOpen && (
+        <nav className="sideMenu">
+          <button onClick={() => goToPage("home")}>Home</button>
+          <button onClick={() => goToPage("stored")}>Stored Info</button>
+          <button onClick={() => goToPage("audit")}>Audit Trail</button>
+        </nav>
+      )}
 
-      <section id="websites" className="card">
-        <h2>Stored Websites</h2>
-        {websites.length === 0 ? (
-          <p>No websites saved yet.</p>
-        ) : (
-          <div className="list">
-            {websites.map((website) => (
-              <div className="listItem" key={website}>
-                <span>{website}</span>
-                <button
-                  className="smallButton"
-                  onClick={() => deleteWebsite(website)}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      {activePage === "home" && (
+        <>
+          <section className="card">
+            <h2>Search</h2>
+            <p>
+              Search all saved terms across all saved websites. If location
+              filters are saved, results must also match at least one location.
+            </p>
 
-      <section id="locations" className="card">
-        <h2>Stored Location Filters</h2>
-        {locations.length === 0 ? (
-          <p>No location filters saved yet.</p>
-        ) : (
-          <div className="list">
-            {locations.map((location) => (
-              <div className="listItem" key={location}>
-                <span>{location}</span>
-                <button
-                  className="smallButton"
-                  onClick={() => deleteLocation(location)}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+            <button onClick={runSearch} disabled={isSearching}>
+              {isSearching ? "Searching..." : "Run Search"}
+            </button>
 
-      <section id="results" className="card">
-        <h2>Latest Results</h2>
-        {results.length === 0 ? (
-          <p>No new successful matches from the latest search.</p>
-        ) : (
-          <ResultsTable results={results} />
-        )}
-      </section>
+            <button onClick={resetSearchState} style={{ marginTop: "10px" }}>
+              Reset Search State
+            </button>
+          </section>
 
-      <section id="audit" className="card">
-        <h2>Audit Trail</h2>
-        {auditTrail.length === 0 ? (
-          <p>No successful matches yet.</p>
-        ) : (
-          <ResultsTable results={auditTrail} />
-        )}
-      </section>
+          <section className="card">
+            <h2>Latest Results ({results.length})</h2>
+            {results.length === 0 ? (
+              <p>No new successful matches from the latest search.</p>
+            ) : (
+              <ResultsTable results={results} />
+            )}
+          </section>
+        </>
+      )}
+
+      {activePage === "stored" && (
+        <>
+          <section className="card">
+            <h2>Stored Info</h2>
+
+            <div className="tabBar">
+              <button onClick={() => setStoredTab("terms")}>
+                Terms ({terms.length})
+              </button>
+              <button onClick={() => setStoredTab("websites")}>
+                Websites ({websites.length})
+              </button>
+              <button onClick={() => setStoredTab("locations")}>
+                Locations ({locations.length})
+              </button>
+            </div>
+          </section>
+
+          {storedTab === "terms" && (
+            <StoredList
+              title="Search Terms"
+              inputValue={termInput}
+              onInputChange={setTermInput}
+              placeholder="e.g. Management Accountant"
+              saveLabel="Save Term"
+              onSave={saveTerm}
+              items={terms}
+              onDelete={deleteTerm}
+              emptyMessage="No terms saved yet."
+            />
+          )}
+
+          {storedTab === "websites" && (
+            <StoredList
+              title="Websites"
+              inputValue={websiteInput}
+              onInputChange={setWebsiteInput}
+              placeholder="e.g. careers.umusic.com"
+              saveLabel="Save Website"
+              onSave={saveWebsite}
+              items={websites}
+              onDelete={deleteWebsite}
+              emptyMessage="No websites saved yet."
+            />
+          )}
+
+          {storedTab === "locations" && (
+            <StoredList
+              title="Location Filters"
+              inputValue={locationInput}
+              onInputChange={setLocationInput}
+              placeholder="e.g. London"
+              saveLabel="Save Location"
+              onSave={saveLocation}
+              items={locations}
+              onDelete={deleteLocation}
+              emptyMessage="No location filters saved yet."
+            />
+          )}
+        </>
+      )}
+
+      {activePage === "audit" && (
+        <section className="card">
+          <h2>Audit Trail ({auditTrail.length})</h2>
+          {auditTrail.length === 0 ? (
+            <p>No successful matches yet.</p>
+          ) : (
+            <ResultsTable results={auditTrail} />
+          )}
+        </section>
+      )}
     </main>
+  );
+}
+
+function StoredList({
+  title,
+  inputValue,
+  onInputChange,
+  placeholder,
+  saveLabel,
+  onSave,
+  items,
+  onDelete,
+  emptyMessage
+}) {
+  return (
+    <section className="card">
+      <h2>{title}</h2>
+
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(event) => onInputChange(event.target.value)}
+        placeholder={placeholder}
+      />
+
+      <button onClick={onSave}>{saveLabel}</button>
+
+      <div style={{ marginTop: "18px" }}>
+        {items.length === 0 ? (
+          <p>{emptyMessage}</p>
+        ) : (
+          <div className="list">
+            {items.map((item) => (
+              <div className="listItem" key={item}>
+                <span>{item}</span>
+                <button className="smallButton" onClick={() => onDelete(item)}>
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 

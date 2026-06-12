@@ -113,6 +113,7 @@ export default function HomePage() {
   }
 
   async function runSearch() {
+    alert(`Run clicked. Terms: ${terms.length}, Websites: ${websites.length}`);
     if (terms.length === 0 || websites.length === 0) return;
 
     setIsSearching(true);

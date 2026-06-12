@@ -379,3 +379,55 @@ select {
   border-radius: 10px;
   font-size: 16px;
 }
+.menuOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 50;
+}
+
+.sideDrawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 78%;
+  max-width: 340px;
+  height: 100vh;
+  background: white;
+  z-index: 60;
+  padding: 34px 24px;
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.18);
+  border-radius: 0 28px 28px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.drawerHeader {
+  padding-bottom: 24px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.drawerHeader h2 {
+  margin: 0 0 8px;
+}
+
+.drawerHeader p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.sideDrawer button {
+  width: 100%;
+  background: transparent;
+  color: #111827;
+  text-align: left;
+  font-size: 20px;
+  padding: 14px 8px;
+  border-radius: 12px;
+}
+
+.sideDrawer button:hover {
+  background: #f3f4f6;
+}

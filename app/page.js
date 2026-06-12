@@ -465,18 +465,27 @@ onToggleDisabled
         ) : (
           <div className="list">
             {items.map((item) => (
-              <div className="listItem" key={item}>
-                <span>{isWebsiteList ? getWebsiteDisplayName(item) : item}</span>
-            {isWebsiteList && onToggleDisabled && (
-  <button className="smallButton" onClick={() => onToggleDisabled(item)}>
-    {disabledItems.includes(item) ? "Enable" : "Disable"}
-  </button>
-)}
+          <div className="listItem" key={item}>
+  <span>{isWebsiteList ? getWebsiteDisplayName(item) : item}</span>
 
-<button className="smallButton" onClick={() => onDelete(item)}>
-  Delete
-</button>
-              </div>
+  <div className="buttonGroup">
+    {isWebsiteList && onToggleDisabled && (
+      <button
+        className="smallButton"
+        onClick={() => onToggleDisabled(item)}
+      >
+        {disabledItems.includes(item) ? "Enable" : "Disable"}
+      </button>
+    )}
+
+    <button
+      className="smallButton"
+      onClick={() => onDelete(item)}
+    >
+      Delete
+    </button>
+  </div>
+</div>
             ))}
           </div>
         )}

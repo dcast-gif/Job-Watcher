@@ -10,7 +10,14 @@ export default function HomePage() {
   const [results, setResults] = useState([]);
   const [auditTrail, setAuditTrail] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+function resetSearchState() {
+  localStorage.removeItem("jobWatcherActiveResults");
+  localStorage.removeItem("jobWatcherResults");
 
+  setResults([]);
+
+  alert("Search state reset. Next search will treat all matches as new.");
+}
   useEffect(() => {
     setTerms(JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]"));
     setWebsites(JSON.parse(localStorage.getItem("jobWatcherWebsites") || "[]"));
@@ -164,6 +171,12 @@ export default function HomePage() {
         <button onClick={runSearch} disabled={isSearching}>
           {isSearching ? "Searching..." : "Run Search"}
         </button>
+        <button
+  onClick={resetSearchState}
+  style={{ marginTop: "10px" }}
+>
+  Reset Search State
+</button>
       </section>
 
       <section id="terms" className="card">

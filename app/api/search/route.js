@@ -299,11 +299,15 @@ const debug = [];
         ...pageLinks,
         ...sitemapLinks
       ]).slice(0, MAX_JOB_PAGES_TO_CHECK);
+const inspection = inspectSite(html, websiteUrl);
+
 debug.push({
   website,
   pageLinks: pageLinks.length,
   sitemapLinks: sitemapLinks.length,
-  totalCandidateLinks: candidateJobLinks.length
+  totalCandidateLinks: candidateJobLinks.length,
+  findings: inspection.findings,
+  possibleUrls: inspection.possibleUrls
 });
       for (const candidate of candidateJobLinks) {
         let jobHtml;

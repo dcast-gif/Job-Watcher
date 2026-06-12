@@ -72,7 +72,9 @@ function clearAuditTrail() {
 
     if (websites.includes(cleanWebsite)) return;
 
-    const updatedWebsites = [...websites, cleanWebsite];
+    const updatedWebsites = [...websites, cleanWebsite].sort((a, b) =>
+  getWebsiteDisplayName(a).localeCompare(getWebsiteDisplayName(b))
+);
     setWebsites(updatedWebsites);
     localStorage.setItem("jobWatcherWebsites", JSON.stringify(updatedWebsites));
 

@@ -210,12 +210,21 @@ function clearAuditTrail() {
           </section>
 
           <section className="card">
-            <h2
-              onClick={() => setLatestResultsOpen(!latestResultsOpen)}
-              style={{ cursor: "pointer" }}
-            >
-              Latest Results ({results.length}) {latestResultsOpen ? "⌃" : "⌄"}
-            </h2>
+          <h2
+  onClick={() => setLatestResultsOpen(!latestResultsOpen)}
+  style={{
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }}
+>
+  <span>Latest Results ({results.length})</span>
+
+  <span className="toggleBox">
+    {latestResultsOpen ? "⌃" : "⌄"}
+  </span>
+</h2>
 
             {latestResultsOpen &&
               (results.length === 0 ? (

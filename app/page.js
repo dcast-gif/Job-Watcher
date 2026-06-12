@@ -279,7 +279,7 @@ export default function HomePage() {
 
             <div className="tabBar">
               <button onClick={() => setStoredTab("terms")}>
-                Terms ({terms.length})
+                Job Titles ({terms.length})
               </button>
               <button onClick={() => setStoredTab("websites")}>
                 Websites ({websites.length})
@@ -292,7 +292,7 @@ export default function HomePage() {
 
           {storedTab === "terms" && (
             <StoredList
-              title="Search Terms"
+              title="Job Titles"
               inputValue={termInput}
               onInputChange={setTermInput}
               placeholder="e.g. Management Accountant"
@@ -471,7 +471,7 @@ function ResultsTable({ results }) {
             </div>
 
             <div>
-              <strong>Search Term</strong>
+           <strong>Job Title</strong>
               <span>{result.term}</span>
             </div>
 

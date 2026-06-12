@@ -215,11 +215,13 @@ localStorage.setItem("jobWatcherDiagnostics", JSON.stringify(debugInfo));
 >
   Latest Results ({results.length}) {latestResultsOpen ? "⌃" : "⌄"}
 </h2>
-            {results.length === 0 ? (
-              <p>No new successful matches from the latest search.</p>
-            ) : (
-              <ResultsTable results={results} />
-            )}
+           {latestResultsOpen && (
+  results.length === 0 ? (
+    <p>No new successful matches from the latest search.</p>
+  ) : (
+    <ResultsTable results={results} />
+  )
+)}
           </section>
         {showDiagnostics && (
 <section className="card">
@@ -402,17 +404,15 @@ function ResultsTable({ results }) {
       <table>
         <thead>
           <tr>
-            <th>Term</th>
-            <th>Website</th>
             <th>Result</th>
+            <th>Company</th>
+            <th>Job Title</th>
             <th>Date Found</th>
           </tr>
         </thead>
         <tbody>
           {results.map((result, index) => (
             <tr key={`${result.term}-${result.url}-${index}`}>
-              <td>{result.term}</td>
-              <td>{result.website}</td>
               <td>
                 <a
                   href={result.url}
@@ -422,6 +422,13 @@ function ResultsTable({ results }) {
                   {result.title}
                 </a>
               </td>
+              <td>
+                {result.website
+                  .replace(/^https?:\/\//, "")
+                  .replace(/^www\./, "")
+                  .split("/")[0]}
+              </td>
+              <td>{result.term}</td>
               <td>{new Date(result.foundAt).toLocaleString()}</td>
             </tr>
           ))}

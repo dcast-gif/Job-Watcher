@@ -246,3 +246,59 @@ td a {
     border-color: #1e293b;
   }
 }
+.resultCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.resultCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px;
+  background: white;
+}
+
+.resultTitle {
+  display: block;
+  color: #111827;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.resultMeta {
+  display: grid;
+  gap: 10px;
+}
+
+.resultMeta div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.resultMeta strong {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.resultMeta span {
+  font-size: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .resultCard {
+    background: #0f172a;
+    border-color: #1e293b;
+  }
+
+  .resultTitle {
+    color: #e5e7eb;
+  }
+
+  .resultMeta strong {
+    color: #94a3b8;
+  }
+}

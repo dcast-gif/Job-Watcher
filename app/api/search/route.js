@@ -36,41 +36,72 @@ function locationMatchesText(text, locations) {
   });
 }
 
-function termMatchesText(text, term) {
-  return normalise(text).includes(normalise(term));
+function termMatchesTitleOrUrl(term, title, url) {
+  const normalisedTerm = normalise(term);
+  const searchableText = `${normalise(title)} ${normalise(url)}`;
+
+  return searchableText.includes(normalisedTerm);
 }
 
 function getPageTitle(html, fallback) {
-  const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-
-  if (titleMatch && titleMatch[1]) {
-    return stripHtml(titleMatch[1]).replace(/\s+/g, " ").trim();
-  }
-
   const h1Match = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
 
   if (h1Match && h1Match[1]) {
     return stripHtml(h1Match[1]).replace(/\s+/g, " ").trim();
   }
 
+  const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+
+  if (titleMatch && titleMatch[1]) {
+    return stripHtml(titleMatch[1]).replace(/\s+/g, " ").trim();
+  }
+
   return fallback;
 }
 
-function isLikelyJobUrl(url) {
+function isRejectedUrl(url) {
   const normalisedUrl = normalise(url);
 
+  const rejectedWords = [
+    "submit job",
+    "submit brief",
+    "job brief",
+    "support your job search",
+    "job search advice",
+    "how we can support",
+    "candidate",
+    "candidates",
+    "employer",
+    "employers",
+    "contact",
+    "about",
+    "privacy",
+    "terms",
+    "login",
+    "register",
+    "newsletter"
+  ];
+
+  return rejectedWords.some((word) => normalisedUrl.includes(word));
+}
+
+function isLikelyJobUrl(url) {
+  if (isRejectedUrl(url)) return false;
+
+  const normalisedUrl = normalise(url);
+
+  if (normalisedUrl.includes("myworkdayjobs com")) return true;
+  if (normalisedUrl.includes("greenhouse io")) return true;
+  if (normalisedUrl.includes("lever co")) return true;
+  if (normalisedUrl.includes("smartrecruiters com")) return true;
+  if (normalisedUrl.includes("workable com")) return true;
+  if (normalisedUrl.includes("bamboohr com")) return true;
+  if (normalisedUrl.includes("ashbyhq com")) return true;
+  if (normalisedUrl.includes("recruitee com")) return true;
+
   return (
-    normalisedUrl.includes("myworkdayjobs com") ||
-    normalisedUrl.includes(" greenhouse io") ||
-    normalisedUrl.includes(" lever co") ||
-    normalisedUrl.includes(" smartrecruiters com") ||
-    normalisedUrl.includes(" workable com") ||
-    normalisedUrl.includes(" bamboohr com") ||
-    normalisedUrl.includes(" ashbyhq com") ||
-    normalisedUrl.includes(" recruitee com") ||
     normalisedUrl.includes(" job ") ||
-    normalisedUrl.includes(" jobs ") ||
-    normalisedUrl.includes(" careers ")
+    normalisedUrl.includes(" jobs ")
   );
 }
 
@@ -100,10 +131,14 @@ function findCandidateJobLinks(html, baseUrl) {
   let workdayMatch;
 
   while ((workdayMatch = workdayUrlRegex.exec(decodedHtml)) !== null) {
-    links.push({
-      title: "Workday job result",
-      url: workdayMatch[0]
-    });
+    const url = workdayMatch[0];
+
+    if (!isRejectedUrl(url)) {
+      links.push({
+        title: "Workday job result",
+        url
+      });
+    }
   }
 
   return removeDuplicateLinks(links).slice(0, MAX_JOB_PAGES_TO_CHECK);
@@ -172,39 +207,15 @@ export async function POST(request) {
         const jobText = stripHtml(jobHtml);
         const pageTitle = getPageTitle(jobHtml, candidate.title);
 
+        if (!locationMatchesText(jobText, locations)) continue;
+
         for (const term of terms) {
-          const termMatches = termMatchesText(jobText, term);
-          const locationMatches = locationMatchesText(jobText, locations);
-
-          if (termMatches && locationMatches) {
+          if (termMatchesTitleOrUrl(term, pageTitle, candidate.url)) {
             results.push({
               term,
               website,
-              title: pageTitle || term,
+              title: pageTitle || candidate.title || term,
               url: candidate.url,
-              foundAt: new Date().toISOString()
-            });
-          }
-        }
-      }
-
-      const pageText = stripHtml(html);
-
-      for (const term of terms) {
-        const termMatches = termMatchesText(pageText, term);
-        const locationMatches = locationMatchesText(pageText, locations);
-
-        if (termMatches && locationMatches) {
-          const directLinks = findCandidateJobLinks(html, websiteUrl).filter(
-            (link) => termMatchesText(link.title, term)
-          );
-
-          for (const link of directLinks) {
-            results.push({
-              term,
-              website,
-              title: link.title || term,
-              url: link.url,
               foundAt: new Date().toISOString()
             });
           }

@@ -113,13 +113,13 @@ export default function HomePage() {
   }
 
   async function runSearch() {
-    alert(`Run clicked. Terms: ${terms.length}, Websites: ${websites.length}`);
+    
     if (terms.length === 0 || websites.length === 0) return;
 
     setIsSearching(true);
 
     try {
-      alert("About to call API");
+      
       const response = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -127,14 +127,8 @@ export default function HomePage() {
       });
 
       const data = await response.json();
-      alert(JSON.stringify({
-  ok: response.ok,
-  status: response.status,
-  results: data.results?.length,
-  debug: data.debug?.length,
-  error: data.error
-}));
-      alert("API returned");
+      
+      
       const debugInfo = data.debug || [];
 
       setDiagnostics(debugInfo);

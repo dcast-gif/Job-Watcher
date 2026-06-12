@@ -54,7 +54,9 @@ function clearAuditTrail() {
     const cleanTerm = termInput.trim();
     if (!cleanTerm || terms.includes(cleanTerm)) return;
 
-    const updatedTerms = [...terms, cleanTerm];
+    const updatedTerms = [...terms, cleanTerm].sort((a, b) =>
+  a.localeCompare(b)
+);
     setTerms(updatedTerms);
     localStorage.setItem("jobWatcherTerms", JSON.stringify(updatedTerms));
     setTermInput("");

@@ -195,7 +195,12 @@ async function discoverHarmonicJobLinks(baseUrl) {
 
     if (!text) continue;
 
-    const decodedText = decodeHtml(text).replace(/\\\//g, "/");
+const decodedText = decodeHtml(text).replace(/\\\//g, "/");
+
+discovered.push({
+  title: `Probe preview: ${decodedText.slice(0, 300)}`,
+  url: probeUrl
+});
 
     const urlRegex =
       /https?:\/\/[^"'\s<>\\]+|\/job\/[^"'\s<>\\]+|\/jobs\/[^"'\s<>\\]+/gi;

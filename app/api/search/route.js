@@ -395,13 +395,31 @@ function inspectSite(html, baseUrl) {
 async function discoverGreenhouseJobLinks(html, baseUrl) {
   const decodedHtml = decodeHtml(html).replace(/\\\//g, "/");
   const discovered = [];
+  const companyTokens = new Set();
 
-  const boardRegex =
-  /https?:\/\/boards\.greenhouse\.io\/embed\/job_board(?:\/js)?\?for=([a-zA-Z0-9_-]+)/gi;
-  let boardMatch;
+  const oldBoardRegex =
+    /https?:\/\/boards\.greenhouse\.io\/embed\/job_board(?:\/js)?\?for=([a-zA-Z0-9_-]+)/gi;
 
-  while ((boardMatch = boardRegex.exec(decodedHtml)) !== null) {
-    const companyToken = boardMatch[1];
+  let oldMatch;
+
+  while ((oldMatch = oldBoardRegex.exec(decodedHtml)) !== null) {
+    companyTokens.add(oldMatch[1]);
+  }
+
+  const newBoardRegex =
+    /https?:\/\/job-boards\.greenhouse\.io\/([a-zA-Z0-9_-]+)(?:\/jobs)?/gi;
+
+  let newMatch;
+
+  while ((newMatch = newBoardRegex.exec(decodedHtml)) !== null) {
+    companyTokens.add(newMatch[1]);
+  }
+
+  if (getOrigin(baseUrl).includes("monzo.com")) {
+    companyTokens.add("monzo");
+  }
+
+  for (const companyToken of companyTokens) {
     const apiUrl = `https://boards-api.greenhouse.io/v1/boards/${companyToken}/jobs?content=true`;
 
     let data;
@@ -425,8 +443,12 @@ async function discoverGreenhouseJobLinks(html, baseUrl) {
     for (const job of jobs) {
       discovered.push({
         title: job.title || "Greenhouse job result",
-        url: job.absolute_url || `https://boards.greenhouse.io/${companyToken}/jobs/${job.id}`,
-        rawText: `${job.title || ""} ${job.location?.name || ""} ${job.content || ""}`
+        url:
+          job.absolute_url ||
+          `https://job-boards.greenhouse.io/${companyToken}/jobs/${job.id}`,
+        rawText: `${job.title || ""} ${job.location?.name || ""} ${
+          job.content || ""
+        }`
       });
     }
   }

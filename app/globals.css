@@ -1021,3 +1021,28 @@ select {
 .topBar h1 {
   font-size: 22px;
 }
+
+.progressSteps {
+  position: relative;
+}
+
+.progressSteps::before {
+  content: "";
+  position: absolute;
+  top: 17px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: #e5e7eb;
+  z-index: 0;
+}
+
+.progressSteps > div {
+  position: relative;
+  z-index: 1;
+}
+
+.progressIcon {
+  position: relative;
+  z-index: 2;
+}

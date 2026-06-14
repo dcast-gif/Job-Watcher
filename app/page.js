@@ -535,11 +535,12 @@ function deleteAppliedJob(job) {
       }))
     }
     style={{
-      cursor: "pointer",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "flex-start"
-    }}
+  cursor: "pointer",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%"
+}}
   >
   <span>{getWebsiteDisplayName(item.website)}</span>
     <span>{openDiagnostics[item.website] ? "⌃" : "⌄"}</span>
@@ -547,8 +548,7 @@ function deleteAppliedJob(job) {
 
   {openDiagnostics[item.website] && (
                       <span>
-                        <strong>{item.website}</strong>
-                        <br />
+                        
                         Platform: {item.platform || "Unknown"}
                         <br />
                         Page links: {item.pageLinks}

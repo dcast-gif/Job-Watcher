@@ -479,7 +479,44 @@ const activeReviewCount = savedJobs.length + results.length;
     {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
   </button>
 </section>
+<section className="progressCard">
+  <div className="progressHeader">
+    <h2>Application Progress</h2>
+    <span>This month</span>
+  </div>
 
+  <div className="progressSteps">
+    <div>
+      <div className="progressIcon">☆</div>
+      <strong>{savedJobs.length}</strong>
+      <span>Saved</span>
+    </div>
+
+    <div>
+      <div className="progressIcon">➤</div>
+      <strong>{appliedJobs.length}</strong>
+      <span>Applied</span>
+    </div>
+
+    <div>
+      <div className="progressIcon">♙</div>
+      <strong>{interviewCount}</strong>
+      <span>Interview</span>
+    </div>
+
+    <div>
+      <div className="progressIcon">⚑</div>
+      <strong>{finalStageCount}</strong>
+      <span>Final Stage</span>
+    </div>
+
+    <div>
+      <div className="progressIcon">♕</div>
+      <strong>{offerCount}</strong>
+      <span>Offers</span>
+    </div>
+  </div>
+</section>
   
 
           {showDiagnostics && (

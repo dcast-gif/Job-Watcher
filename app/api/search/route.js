@@ -602,6 +602,9 @@ debug.push({
   totalCandidateLinks: candidateJobLinks.length,
   findings: inspection.findings,
   possibleUrls: inspection.possibleUrls,
+  checkedUrls: candidateJobLinks
+  .slice(0, 10)
+  .map((link) => link.url),
 });
       const BATCH_SIZE = 10;
 

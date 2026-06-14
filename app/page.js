@@ -685,6 +685,13 @@ Checked URLs:
       {activePage === "applied" && (
         <section className="card">
           <h2>Applied Jobs ({appliedJobs.length})</h2>
+          <div className="statusSummary">
+  <span>Applied: {appliedJobs.filter((job) => job.status === "Applied").length}</span>
+  <span>Interview: {appliedJobs.filter((job) => job.status === "Interview").length}</span>
+  <span>Final Stage: {appliedJobs.filter((job) => job.status === "Final Stage").length}</span>
+  <span>Offer: {appliedJobs.filter((job) => job.status === "Offer").length}</span>
+  <span>Rejected: {appliedJobs.filter((job) => job.status === "Rejected").length}</span>
+</div>
 
           <button
             onClick={() => exportJobs(appliedJobs, "job-dashboard-applied-jobs.csv")}

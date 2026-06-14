@@ -1282,3 +1282,22 @@ select {
     color: #cbd5e1;
   }
 }
+.bottomNavActive {
+  background: #111827 !important;
+  color: white !important;
+}
+
+.bottomNavActive span {
+  color: white !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .bottomNavActive {
+    background: #e5e7eb !important;
+    color: #020617 !important;
+  }
+
+  .bottomNavActive span {
+    color: #020617 !important;
+  }
+}

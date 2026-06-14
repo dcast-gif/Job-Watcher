@@ -538,7 +538,7 @@ function deleteAppliedJob(job) {
       cursor: "pointer",
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "center"
+      alignItems: "flex-start"
     }}
   >
   <span>{getWebsiteDisplayName(item.website)}</span>

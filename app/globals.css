@@ -87,10 +87,7 @@ button:hover {
 }
 
 .listItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  display: block;
   padding: 12px;
   border: 1px solid #e5e7eb;
   border-radius: 10px;

@@ -833,3 +833,79 @@ select {
   padding: 12px 16px;
   font-size: 14px;
 }
+.progressCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.progressHeader h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.progressHeader span {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.progressSteps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.progressSteps > div {
+  min-width: 0;
+}
+
+.progressIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  font-size: 17px;
+}
+
+.progressSteps strong {
+  display: block;
+  font-size: 20px;
+}
+
+.progressSteps span {
+  display: block;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (prefers-color-scheme: dark) {
+  .progressCard {
+    background: #0f172a;
+    border-color: #1e293b;
+  }
+
+  .progressIcon {
+    background: #1e293b;
+  }
+
+  .progressHeader span {
+    color: #94a3b8;
+  }
+}

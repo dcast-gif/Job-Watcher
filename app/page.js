@@ -570,7 +570,10 @@ const activeReviewCount = savedJobs.length + results.length;
     />
 
     <section className="bottomSheet">
-      <div className="sheetHandle" />
+     <div
+  className="sheetHandle"
+  onClick={() => setLatestSheetOpen(false)}
+/>
 
       <div className="sheetHeader">
         <h2>Latest Job Matches</h2>

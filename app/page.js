@@ -484,36 +484,47 @@ const activeReviewCount = savedJobs.length + results.length;
             </button>
           </section>
 
-          <section className="card">
-            <h2
-              onClick={() => setLatestResultsOpen(!latestResultsOpen)}
-              style={{
-                cursor: "pointer",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-              <span>Latest Results ({results.length})</span>
+      <section className="dashboardHero">
+  <div className="heroTop">
+    <div>
+      <h2>Good afternoon, Dylan 👋</h2>
+      <p>Here’s your job search overview</p>
+    </div>
 
-              <span className="toggleBox">
-                {latestResultsOpen ? "⌃" : "⌄"}
-              </span>
-            </h2>
+    <div className="avatarCircle">DW</div>
+  </div>
 
-            {latestResultsOpen &&
-              (results.length === 0 ? (
-                <p>No new successful matches from the latest search.</p>
-              ) : (
-                <ResultsTable
-                  results={results}
-                  savedJobs={savedJobs}
-                  appliedJobs={appliedJobs}
-                  onToggleSaved={toggleSavedJob}
-                  onApplyJob={applyForJob}
-                />
-              ))}
-          </section>
+  <div className="heroStats">
+    <div>
+      <span className="heroIcon">💼</span>
+      <strong>{savedJobs.length}</strong>
+      <p>Saved jobs</p>
+      <small>{activeReviewCount} need review</small>
+    </div>
+
+    <div>
+      <span className="heroIcon">📅</span>
+      <strong>{interviewCount}</strong>
+      <p>Active interviews</p>
+      <small>{interviewCount > 0 ? "Keep it up!" : "Keep applying"}</small>
+    </div>
+
+    <div>
+      <span className="heroIcon">📈</span>
+      <strong>{appliedJobs.length}</strong>
+      <p>Applications</p>
+      <small>This month</small>
+    </div>
+  </div>
+
+  <div className="heroMessage">
+    <span>⭐</span>
+    <div>
+      <strong>Keep applying — you’re doing great.</strong>
+      <p>Consistency is the key to landing the right role.</p>
+    </div>
+  </div>
+</section>
 
           {showDiagnostics && (
             <section className="card">

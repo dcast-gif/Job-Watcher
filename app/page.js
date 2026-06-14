@@ -124,6 +124,23 @@ const [statsOpen, setStatsOpen] = useState(true);
     setAppliedJobs(updatedAppliedJobs);
     localStorage.setItem("jobWatcherAppliedJobs", JSON.stringify(updatedAppliedJobs));
   }
+  function updateAppliedComments(job) {
+  const comments = window.prompt(
+    "Edit Additional Comments",
+    job.additionalComments || ""
+  );
+
+  if (comments === null) return;
+
+  const updatedAppliedJobs = appliedJobs.map((appliedJob) =>
+    appliedJob.url === job.url
+      ? { ...appliedJob, additionalComments: comments.trim() }
+      : appliedJob
+  );
+
+  setAppliedJobs(updatedAppliedJobs);
+  localStorage.setItem("jobWatcherAppliedJobs", JSON.stringify(updatedAppliedJobs));
+}
 function moveAppliedJobToSaved(job) {
   const updatedAppliedJobs = appliedJobs.filter(
     (appliedJob) => appliedJob.url !== job.url

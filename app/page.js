@@ -126,7 +126,7 @@ const [statsOpen, setStatsOpen] = useState(true);
   }
   function updateAppliedComments(job) {
   const comments = window.prompt(
-    "Edit Additional Comments",
+    "Edit Application Notes",
     job.additionalComments || ""
   );
 
@@ -189,7 +189,7 @@ function deleteAppliedJob(job) {
       "Status",
       "Found",
       "Applied",
-      "Additional Comments",
+      "Application Notes",
       "URL"
     ];
 
@@ -1001,7 +1001,7 @@ function ResultsTable({
   </button>
 )}
                   <div>
-  <strong>Additional Comments</strong>
+  <strong>Application Notes</strong>
   <span>{result.additionalComments || "None"}</span>
 </div>
 

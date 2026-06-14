@@ -562,7 +562,58 @@ const activeReviewCount = savedJobs.length + results.length;
     </div>
   )}
 </section>
+{latestSheetOpen && (
+  <>
+    <div
+      className="sheetBackdrop"
+      onClick={() => setLatestSheetOpen(false)}
+    />
 
+    <section className="bottomSheet">
+      <div className="sheetHandle" />
+
+      <div className="sheetHeader">
+        <h2>Latest Job Matches</h2>
+        <button onClick={() => setLatestSheetOpen(false)}>Close</button>
+      </div>
+
+      <div className="latestMatchesList">
+        {results.map((job, index) => (
+          <div className="latestMatchItem" key={`${job.url}-${index}`}>
+            <div className="companyLogoBox">
+              {getWebsiteDisplayName(job.website).slice(0, 2).toLowerCase()}
+            </div>
+
+            <div className="latestMatchInfo">
+              <a href={job.url} target="_blank" rel="noopener noreferrer">
+                {job.title}
+              </a>
+              <span>{getWebsiteDisplayName(job.website)}</span>
+              {job.salary && <small>{job.salary}</small>}
+            </div>
+
+            <div className="latestMatchActions">
+              <button
+                className="latestSaveButton"
+                onClick={() => toggleSavedJob(job)}
+              >
+                {savedJobs.some((savedJob) => savedJob.url === job.url) ? "★" : "☆"}
+              </button>
+
+              <span>{timeAgo(job.foundAt)}</span>
+
+              <button onClick={() => applyForJob(job)}>
+                {appliedJobs.some((appliedJob) => appliedJob.url === job.url)
+                  ? "Applied"
+                  : "Apply"}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </>
+)}
           {showDiagnostics && (
             <section className="card">
               <h2>Search Diagnostics</h2>

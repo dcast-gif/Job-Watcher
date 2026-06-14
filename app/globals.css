@@ -1175,3 +1175,51 @@ select {
   align-items: flex-end;
   gap: 6px;
 }
+.sheetBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 80;
+}
+
+.bottomSheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 82vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 28px 28px 0 0;
+  padding: 12px 16px 28px;
+  z-index: 90;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.sheetHandle {
+  width: 54px;
+  height: 5px;
+  border-radius: 999px;
+  background: #d1d5db;
+  margin: 0 auto 14px;
+}
+
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.sheetHeader h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.sheetHeader button {
+  width: auto;
+  background: transparent;
+  color: #6b7280;
+  padding: 8px;
+  font-size: 14px;
+}

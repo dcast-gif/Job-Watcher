@@ -538,10 +538,22 @@ const activeReviewCount = savedJobs.length + results.length;
             {job.salary && <small>{job.salary}</small>}
           </div>
 
-          <div className="latestMatchActions">
-            <span>{timeAgo(job.foundAt)}</span>
-            <button onClick={() => applyForJob(job)}>Applied</button>
-          </div>
+        <div className="latestMatchActions">
+  <button
+    className="latestSaveButton"
+    onClick={() => toggleSavedJob(job)}
+  >
+    {savedJobs.some((savedJob) => savedJob.url === job.url) ? "★" : "☆"}
+  </button>
+
+  <span>{timeAgo(job.foundAt)}</span>
+
+  <button onClick={() => applyForJob(job)}>
+    {appliedJobs.some((appliedJob) => appliedJob.url === job.url)
+      ? "Applied"
+      : "Apply"}
+  </button>
+</div>
         </div>
       ))}
     </div>

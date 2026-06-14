@@ -759,3 +759,46 @@ select {
     background: #1e293b;
   }
 }
+.searchActionCard {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+}
+
+.searchActionLeft {
+  margin-bottom: 0;
+}
+
+.searchActionCard h2 {
+  font-size: 20px;
+}
+
+.searchIconCircle {
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+}
+
+.searchNowButton {
+  width: auto;
+  min-width: 150px;
+  margin-bottom: 0;
+  padding: 14px 18px;
+}
+
+.secondaryActionButton {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .searchActionCard {
+    grid-template-columns: 1fr;
+  }
+
+  .searchNowButton {
+    width: 100%;
+  }
+}

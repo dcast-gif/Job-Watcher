@@ -24,6 +24,7 @@ export default function HomePage() {
 
   const [isSearching, setIsSearching] = useState(false);
   const [showDiagnostics, setShowDiagnostics] = useState(false);
+  const [openDiagnostics, setOpenDiagnostics] = useState({});
   const [latestResultsOpen, setLatestResultsOpen] = useState(true);
 const [statsOpen, setStatsOpen] = useState(true);
   useEffect(() => {
@@ -522,7 +523,29 @@ function deleteAppliedJob(job) {
               ) : (
                 <div className="list">
                   {diagnostics.map((item, index) => (
-                    <div className="listItem" key={`${item.website}-${index}`}>
+                 <div
+  className="listItem"
+  key={`${item.website}-${index}`}
+>
+  <h3
+    onClick={() =>
+      setOpenDiagnostics((prev) => ({
+        ...prev,
+        [item.website]: !prev[item.website]
+      }))
+    }
+    style={{
+      cursor: "pointer",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center"
+    }}
+  >
+    <span>{item.website}</span>
+    <span>{openDiagnostics[item.website] ? "⌃" : "⌄"}</span>
+  </h3>
+
+  {openDiagnostics[item.website] && (
                       <span>
                         <strong>{item.website}</strong>
                         <br />
@@ -567,6 +590,7 @@ Checked URLs:
   <span>None</span>
 )}
                       </span>
+                    )}
                     </div>
                   ))}
                 </div>

@@ -966,10 +966,15 @@ function ResultsTable({
                     <span>{formatDate(result.appliedAt)}</span>
                   </div>
 
-                  <div>
-                    <strong>Status</strong>
-                    <select
-                      value={result.status || "Applied"}
+               <div>
+  <strong>Current Status</strong>
+  <span>{result.status || "Applied"}</span>
+</div>
+
+<div>
+  <strong>Change Status</strong>
+  <select
+    value={result.status || "Applied"}
                       onChange={(event) =>
                         onUpdateStatus(result, event.target.value)
                       }

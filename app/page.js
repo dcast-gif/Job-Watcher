@@ -892,26 +892,35 @@ showAppliedFields
           )}
         </section>
       )}
-      <nav className="bottomNav">
-<button
-  className={activePage === "home" ? "bottomNavActive" : ""}
-  onClick={() => goToPage("home")}
->
+   <nav className="bottomNav">
+  <button
+    className={activePage === "home" ? "bottomNavActive" : ""}
+    onClick={() => goToPage("home")}
+  >
     <span>⌂</span>
     Dashboard
   </button>
 
-  <button onClick={() => goToPage("stored")}>
+  <button
+    className={activePage === "stored" ? "bottomNavActive" : ""}
+    onClick={() => goToPage("stored")}
+  >
     <span>⌕</span>
     Search
   </button>
 
-  <button onClick={() => goToPage("saved")}>
+  <button
+    className={activePage === "saved" ? "bottomNavActive" : ""}
+    onClick={() => goToPage("saved")}
+  >
     <span>☆</span>
     Saved
   </button>
 
-  <button onClick={() => goToPage("applied")}>
+  <button
+    className={activePage === "applied" ? "bottomNavActive" : ""}
+    onClick={() => goToPage("applied")}
+  >
     <span>✓</span>
     Applications
   </button>

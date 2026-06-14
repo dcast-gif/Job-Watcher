@@ -537,6 +537,19 @@ function deleteAppliedJob(job) {
                         ) : (
                           <span>None</span>
                         )}
+                        <br />
+Checked URLs:
+<br />
+{item.checkedUrls && item.checkedUrls.length > 0 ? (
+  item.checkedUrls.map((url) => (
+    <span key={url}>
+      {url}
+      <br />
+    </span>
+  ))
+) : (
+  <span>None</span>
+)}
                       </span>
                     </div>
                   ))}
@@ -544,6 +557,7 @@ function deleteAppliedJob(job) {
               )}
             </section>
           )}
+  
         </>
       )}
 

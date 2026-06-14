@@ -88,10 +88,11 @@ const [statsOpen, setStatsOpen] = useState(true);
     const alreadyApplied = appliedJobs.some((appliedJob) => appliedJob.url === job.url);
 
     if (alreadyApplied) {
-      alert("This job is already in Applied Jobs.");
-const comments = window.prompt("Application Notes", "");
-    const comments = window.prompt("Additional Comments", "");
+  alert("This job is already in Applied Jobs.");
+  return;
+}
 
+const comments = window.prompt("Application Notes", "");
     if (comments === null) return;
 
     const appliedJob = {

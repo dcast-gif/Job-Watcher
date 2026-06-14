@@ -671,3 +671,91 @@ select {
 .secondaryActionButton:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+.dashboardHero {
+  padding: 14px 16px;
+  border-radius: 14px;
+}
+
+.heroTop {
+  margin-bottom: 12px;
+}
+
+.heroTop h2 {
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.heroTop p {
+  font-size: 13px;
+}
+
+.avatarCircle {
+  width: 42px;
+  height: 42px;
+  font-size: 15px;
+}
+
+.heroStats {
+  gap: 8px;
+  padding: 10px 0 12px;
+}
+
+.heroIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #eef2ff;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+
+.heroStats strong {
+  font-size: 20px;
+}
+
+.heroStats p {
+  font-size: 12px;
+  line-height: 1.2;
+  margin: 2px 0;
+}
+
+.heroStats small {
+  font-size: 11px;
+}
+
+.heroMessage {
+  padding-top: 10px;
+  gap: 10px;
+}
+
+.heroMessage span {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #fff7ed;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.heroMessage strong {
+  font-size: 13px;
+}
+
+.heroMessage p {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+@media (prefers-color-scheme: dark) {
+  .heroIcon {
+    background: #1e293b;
+  }
+
+  .heroMessage span {
+    background: #1e293b;
+  }
+}

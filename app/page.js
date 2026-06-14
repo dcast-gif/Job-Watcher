@@ -527,24 +527,28 @@ function deleteAppliedJob(job) {
   className="listItem"
   key={`${item.website}-${index}`}
 >
-  <h3
-    onClick={() =>
-      setOpenDiagnostics((prev) => ({
-        ...prev,
-        [item.website]: !prev[item.website]
-      }))
-    }
-    style={{
-  cursor: "pointer",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  width: "100%"
-}}
-  >
+<h3
+  onClick={() =>
+    setOpenDiagnostics((prev) => ({
+      ...prev,
+      [item.website]: !prev[item.website]
+    }))
+  }
+  style={{
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: openDiagnostics[item.website] ? "16px" : "0"
+  }}
+>
   <span>{getWebsiteDisplayName(item.website)}</span>
-    <span>{openDiagnostics[item.website] ? "⌃" : "⌄"}</span>
-  </h3>
+
+  <span className="toggleBox">
+    {openDiagnostics[item.website] ? "⌃" : "⌄"}
+  </span>
+</h3>
 
   {openDiagnostics[item.website] && (
                       <span>

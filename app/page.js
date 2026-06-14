@@ -402,9 +402,18 @@ const activeReviewCount = savedJobs.length + results.length;
     </div>
 
  <button onClick={() => goToPage("home")}>Home</button>
-<button onClick={() => goToPage("stored")}>Stored Info</button>
-<button onClick={() => goToPage("saved")}>Saved Jobs</button>
-<button onClick={() => goToPage("applied")}>Applied Jobs</button>
+<button
+  className={activePage === "stored" ? "bottomNavActive" : ""}
+  onClick={() => goToPage("stored")}
+>Stored Info</button>
+<button
+  className={activePage === "saved" ? "bottomNavActive" : ""}
+  onClick={() => goToPage("saved")}
+>Saved Jobs</button>
+<button
+  className={activePage === "applied" ? "bottomNavActive" : ""}
+  onClick={() => goToPage("applied")}
+>Applied Jobs</button>
 <button onClick={() => goToPage("audit")}>Audit Trail</button>
 
 <button onClick={resetSearchState}>Reset Search State</button>

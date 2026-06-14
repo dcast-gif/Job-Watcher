@@ -410,57 +410,7 @@ const activeReviewCount = savedJobs.length + results.length;
 
       {activePage === "home" && (
         <>
-          <section className="card">
-           <h2
-  onClick={() => setStatsOpen(!statsOpen)}
-  style={{
-    cursor: "pointer",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center"
-  }}
->
-  <span>Stats</span>
-
-  <span className="toggleBox">
-    {statsOpen ? "⌃" : "⌄"}
-  </span>
-</h2>
-
-{statsOpen && (
-  <div className="statsGrid">
-              <div>
-                <strong>Latest</strong>
-                <span>{results.length}</span>
-              </div>
-              <div>
-                <strong>Saved</strong>
-                <span>{savedJobs.length}</span>
-              </div>
-              <div>
-                <strong>Applied</strong>
-                <span>{appliedJobs.length}</span>
-              </div>
-              <div>
-                <strong>Interviews</strong>
-                <span>{interviewCount}</span>
-              </div>
-              <div>
-                <strong>Final Stage</strong>
-                <span>{finalStageCount}</span>
-              </div>
-              <div>
-                <strong>Rejected</strong>
-                <span>{rejectedCount}</span>
-              </div>
-             <div>
-  <strong>Offers</strong>
-  <span>{offerCount}</span>
-</div>
-
-</div>
-)}
-</section>
+       
           <section className="card">
             <h2>Search</h2>
             <p>

@@ -514,7 +514,39 @@ const activeReviewCount = savedJobs.length + results.length;
     </div>
   </div>
 </section>
-  
+  <section className="latestMatchesCard">
+  <div className="latestMatchesHeader">
+    <h2>Latest Job Matches</h2>
+    <button onClick={() => setLatestResultsOpen(true)}>View all</button>
+  </div>
+
+  {results.length === 0 ? (
+    <p>No new successful matches from the latest search.</p>
+  ) : (
+    <div className="latestMatchesList">
+      {results.slice(0, 3).map((job, index) => (
+        <div className="latestMatchItem" key={`${job.url}-${index}`}>
+          <div className="companyLogoBox">
+            {getWebsiteDisplayName(job.website).slice(0, 2).toLowerCase()}
+          </div>
+
+          <div className="latestMatchInfo">
+            <a href={job.url} target="_blank" rel="noopener noreferrer">
+              {job.title}
+            </a>
+            <span>{getWebsiteDisplayName(job.website)}</span>
+            {job.salary && <small>{job.salary}</small>}
+          </div>
+
+          <div className="latestMatchActions">
+            <span>{timeAgo(job.foundAt)}</span>
+            <button onClick={() => applyForJob(job)}>Applied</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
 
           {showDiagnostics && (
             <section className="card">

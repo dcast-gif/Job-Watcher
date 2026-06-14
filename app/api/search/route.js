@@ -635,8 +635,7 @@ for (let i = 0; i < candidateJobLinks.length; i += BATCH_SIZE) {
     const jobText = item.candidate.rawText || stripHtml(item.jobHtml);
 const jobLocation = extractJobLocation(item.jobHtml);
 
-const pageTitle =
-  item.candidate.title || getPageTitle(item.jobHtml, item.candidate.title);
+const pageTitle = getPageTitle(item.jobHtml, item.candidate.title);
 
 const locationTextToCheck = jobLocation || jobText;
 

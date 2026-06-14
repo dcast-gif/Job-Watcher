@@ -377,7 +377,8 @@ function deleteAppliedJob(job) {
   const finalStageCount = appliedJobs.filter((job) => job.status === "Final Stage").length;
   const rejectedCount = appliedJobs.filter((job) => job.status === "Rejected").length;
   const offerCount = appliedJobs.filter((job) => job.status === "Offer").length;
-
+const appliedCount = appliedJobs.filter((job) => job.status === "Applied").length;
+const activeReviewCount = savedJobs.length + results.length;
   return (
     <main className="container">
       <header className="topBar">

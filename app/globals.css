@@ -504,3 +504,10 @@ select {
     background: #020617;
   }
 }
+.statusSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}

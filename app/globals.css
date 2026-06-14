@@ -1082,25 +1082,27 @@ select {
 }
 
 .latestMatchItem {
+  position: relative;
   display: grid;
-  grid-template-columns: 48px 1fr auto;
+  grid-template-columns: 56px 1fr 82px;
   gap: 12px;
   align-items: center;
   border: 1px solid #e5e7eb;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 10px;
+  background: white;
 }
 
 .companyLogoBox {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
   background: #111827;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
 }
 
@@ -1111,10 +1113,11 @@ select {
 .latestMatchInfo a {
   display: block;
   color: #111827;
-  font-weight: 700;
+  font-weight: 800;
   text-decoration: none;
   font-size: 13px;
-  line-height: 1.3;
+  line-height: 1.15;
+  margin-bottom: 4px;
 }
 
 .latestMatchInfo span,
@@ -1122,14 +1125,14 @@ select {
   display: block;
   color: #6b7280;
   font-size: 12px;
-  margin-top: 3px;
+  line-height: 1.2;
+  margin-top: 2px;
 }
 
 .latestMatchActions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
+  display: grid;
+  justify-items: end;
+  gap: 6px;
 }
 
 .latestMatchActions span {
@@ -1137,43 +1140,23 @@ select {
   font-size: 12px;
 }
 
-.latestMatchActions button {
+.latestMatchActions button:not(.latestSaveButton) {
   width: auto;
-  padding: 8px 12px;
+  min-width: 70px;
+  padding: 8px 10px;
   border-radius: 10px;
   font-size: 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .latestMatchesCard {
-    background: #0f172a;
-    border-color: #1e293b;
-  }
-
-  .latestMatchItem {
-    border-color: #1e293b;
-  }
-
-  .latestMatchInfo a {
-    color: #e5e7eb;
-  }
-}
 .latestSaveButton {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 18px;
   background: white;
   border: 1px solid #d1d5db;
   color: #111827;
-}
-
-.latestMatchActions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
 }
 .sheetBackdrop {
   position: fixed;

@@ -909,3 +909,66 @@ select {
     color: #94a3b8;
   }
 }
+.container {
+  padding: 14px 14px 90px;
+}
+
+.card,
+.dashboardHero,
+.searchActionCard,
+.progressCard {
+  margin-bottom: 12px;
+}
+
+.topBar {
+  margin-bottom: 14px;
+  padding: 10px 0;
+}
+
+.menuButton {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  font-size: 21px;
+}
+
+.topBar h1 {
+  font-size: 24px;
+}
+
+.searchActionCard {
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.searchIconCircle {
+  width: 40px;
+  height: 40px;
+}
+
+.searchNowButton,
+.secondaryActionButton {
+  padding: 10px 14px;
+}
+
+.progressCard {
+  padding: 14px;
+}
+
+.progressHeader {
+  margin-bottom: 10px;
+}
+
+.progressIcon {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 6px;
+}
+
+.progressSteps strong {
+  font-size: 18px;
+}
+
+.progressSteps span {
+  font-size: 11px;
+}

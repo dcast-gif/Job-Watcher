@@ -492,3 +492,15 @@ select {
 .sideDrawerOpen {
   transform: translateX(0);
 }
+.topBar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: #f4f6f8;
+  padding: 16px 0;
+}
+@media (prefers-color-scheme: dark) {
+  .topBar {
+    background: #020617;
+  }
+}

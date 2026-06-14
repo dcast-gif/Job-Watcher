@@ -517,7 +517,16 @@ const activeReviewCount = savedJobs.length + results.length;
   <section className="latestMatchesCard">
   <div className="latestMatchesHeader">
     <h2>Latest Job Matches</h2>
-    <button onClick={() => setLatestResultsOpen(true)}>View all</button>
+   <button
+  onClick={() => {
+    setLatestResultsOpen(true);
+    document.getElementById("latest-results-full")?.scrollIntoView({
+      behavior: "smooth"
+    });
+  }}
+>
+  View all
+</button>
   </div>
 
   {results.length === 0 ? (

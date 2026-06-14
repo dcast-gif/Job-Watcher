@@ -884,7 +884,10 @@ showAppliedFields
         </section>
       )}
       <nav className="bottomNav">
-  <button onClick={() => goToPage("home")}>
+<button
+  className={activePage === "home" ? "bottomNavActive" : ""}
+  onClick={() => goToPage("home")}
+>
     <span>⌂</span>
     Dashboard
   </button>

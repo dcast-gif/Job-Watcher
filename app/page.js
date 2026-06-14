@@ -468,16 +468,7 @@ const activeReviewCount = savedJobs.length + results.length;
     {isSearching ? "Searching..." : "Search Now →"}
   </button>
 
-  <button className="secondaryActionButton" onClick={resetSearchState}>
-    Reset Search State
-  </button>
 
-  <button
-    className="secondaryActionButton"
-    onClick={() => setShowDiagnostics(!showDiagnostics)}
-  >
-    {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
-  </button>
 </section>
 <section className="progressCard">
   <div className="progressHeader">

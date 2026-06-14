@@ -802,3 +802,34 @@ select {
     width: 100%;
   }
 }
+.searchActionCard {
+  padding: 18px;
+}
+
+.searchActionLeft {
+  gap: 12px;
+}
+
+.searchActionCard h2 {
+  font-size: 18px;
+}
+
+.searchActionCard p {
+  font-size: 13px;
+}
+
+.searchIconCircle {
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+}
+
+.searchNowButton {
+  padding: 12px 16px;
+  font-size: 15px;
+}
+
+.secondaryActionButton {
+  padding: 12px 16px;
+  font-size: 14px;
+}

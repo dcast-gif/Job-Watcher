@@ -895,6 +895,7 @@ function ResultsTable({
   onToggleSaved,
   onApplyJob,
   onUpdateStatus,
+  onUpdateComments,
   onMoveAppliedToSaved,
   onDeleteApplied,
   showAppliedFields = false

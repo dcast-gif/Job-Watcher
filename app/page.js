@@ -716,9 +716,10 @@ Checked URLs:
               onToggleSaved={toggleSavedJob}
               onApplyJob={applyForJob}
               onUpdateStatus={updateAppliedStatus}
-              onMoveAppliedToSaved={moveAppliedJobToSaved}
+onUpdateComments={updateAppliedComments}
+onMoveAppliedToSaved={moveAppliedJobToSaved}
 onDeleteApplied={deleteAppliedJob}
-              showAppliedFields
+showAppliedFields
             />
           )}
         </section>

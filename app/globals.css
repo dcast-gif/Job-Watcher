@@ -1223,3 +1223,38 @@ select {
   padding: 8px;
   font-size: 14px;
 }
+@media (prefers-color-scheme: dark) {
+  .bottomSheet {
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+
+  .sheetHeader h2 {
+    color: #e5e7eb;
+  }
+
+  .sheetHeader button {
+    color: #cbd5e1;
+  }
+
+  .bottomSheet .latestMatchItem {
+    background: #111827;
+    border-color: #334155;
+  }
+
+  .bottomSheet .latestMatchInfo a {
+    color: #e5e7eb;
+  }
+
+  .bottomSheet .latestMatchInfo span,
+  .bottomSheet .latestMatchInfo small,
+  .bottomSheet .latestMatchActions span {
+    color: #cbd5e1;
+  }
+
+  .bottomSheet .latestSaveButton {
+    background: #0f172a;
+    border-color: #475569;
+    color: #e5e7eb;
+  }
+}

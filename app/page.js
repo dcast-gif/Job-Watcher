@@ -410,31 +410,7 @@ const activeReviewCount = savedJobs.length + results.length;
 
       {activePage === "home" && (
         <>
-       
-          <section className="card">
-            <h2>Search</h2>
-            <p>
-              Search all saved terms across all saved websites. If location filters are
-              saved, results must also match at least one location.
-            </p>
-
-            <button onClick={runSearch} disabled={isSearching}>
-              {isSearching ? "Searching..." : "Run Search"}
-            </button>
-
-            <button onClick={resetSearchState} style={{ marginTop: "10px" }}>
-              Reset Search State
-            </button>
-
-            <button
-              onClick={() => setShowDiagnostics(!showDiagnostics)}
-              style={{ marginTop: "10px" }}
-            >
-              {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
-            </button>
-          </section>
-
-      <section className="dashboardHero">
+           <section className="dashboardHero">
   <div className="heroTop">
     <div>
       <h2>Good afternoon, Dylan 👋</h2>
@@ -475,6 +451,30 @@ const activeReviewCount = savedJobs.length + results.length;
     </div>
   </div>
 </section>
+          <section className="card">
+            <h2>Search</h2>
+            <p>
+              Search all saved terms across all saved websites. If location filters are
+              saved, results must also match at least one location.
+            </p>
+
+            <button onClick={runSearch} disabled={isSearching}>
+              {isSearching ? "Searching..." : "Run Search"}
+            </button>
+
+            <button onClick={resetSearchState} style={{ marginTop: "10px" }}>
+              Reset Search State
+            </button>
+
+            <button
+              onClick={() => setShowDiagnostics(!showDiagnostics)}
+              style={{ marginTop: "10px" }}
+            >
+              {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
+            </button>
+          </section>
+
+  
 
           {showDiagnostics && (
             <section className="card">

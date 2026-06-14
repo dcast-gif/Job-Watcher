@@ -1000,12 +1000,19 @@ function ResultsTable({
     Remove from Applied
   </button>
 )}
-                  {result.additionalComments && (
-                    <div>
-                      <strong>Additional Comments</strong>
-                      <span>{result.additionalComments}</span>
-                    </div>
-                  )}
+                  <div>
+  <strong>Additional Comments</strong>
+  <span>{result.additionalComments || "None"}</span>
+</div>
+
+{onUpdateComments && (
+  <button
+    className="smallButton"
+    onClick={() => onUpdateComments(result)}
+  >
+    Edit Notes
+  </button>
+)}
                 </>
               )}
             </div>

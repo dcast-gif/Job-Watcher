@@ -568,7 +568,36 @@ const activeReviewCount = savedJobs.length + results.length;
     </div>
   )}
 </section>
+<section className="card" id="latest-results-full">
+  <h2
+    onClick={() => setLatestResultsOpen(!latestResultsOpen)}
+    style={{
+      cursor: "pointer",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center"
+    }}
+  >
+    <span>Latest Results ({results.length})</span>
 
+    <span className="toggleBox">
+      {latestResultsOpen ? "⌃" : "⌄"}
+    </span>
+  </h2>
+
+  {latestResultsOpen &&
+    (results.length === 0 ? (
+      <p>No new successful matches from the latest search.</p>
+    ) : (
+      <ResultsTable
+        results={results}
+        savedJobs={savedJobs}
+        appliedJobs={appliedJobs}
+        onToggleSaved={toggleSavedJob}
+        onApplyJob={applyForJob}
+      />
+    ))}
+</section>
           {showDiagnostics && (
             <section className="card">
               <h2>Search Diagnostics</h2>

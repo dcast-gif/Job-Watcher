@@ -400,11 +400,17 @@ const activeReviewCount = savedJobs.length + results.length;
       <p>Your job search hub</p>
     </div>
 
-    <button onClick={() => goToPage("home")}>⌂ Home</button>
-    <button onClick={() => goToPage("stored")}>☰ Stored Info</button>
-    <button onClick={() => goToPage("saved")}>☆ Saved Jobs</button>
-    <button onClick={() => goToPage("applied")}>✓ Applied Jobs</button>
-    <button onClick={() => goToPage("audit")}>▤ Audit Trail</button>
+ <button onClick={() => goToPage("home")}>Home</button>
+<button onClick={() => goToPage("stored")}>Stored Info</button>
+<button onClick={() => goToPage("saved")}>Saved Jobs</button>
+<button onClick={() => goToPage("applied")}>Applied Jobs</button>
+<button onClick={() => goToPage("audit")}>Audit Trail</button>
+
+<button onClick={resetSearchState}>Reset Search State</button>
+
+<button onClick={() => setShowDiagnostics(!showDiagnostics)}>
+  {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
+</button>
   </nav>
 </>
 

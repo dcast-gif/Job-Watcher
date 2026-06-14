@@ -27,6 +27,7 @@ export default function HomePage() {
   const [openDiagnostics, setOpenDiagnostics] = useState({});
   const [latestResultsOpen, setLatestResultsOpen] = useState(true);
 const [statsOpen, setStatsOpen] = useState(true);
+const [latestSheetOpen, setLatestSheetOpen] = useState(false);
   useEffect(() => {
     setTerms(
       JSON.parse(localStorage.getItem("jobWatcherTerms") || "[]").sort((a, b) =>

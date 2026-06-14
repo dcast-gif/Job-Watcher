@@ -89,9 +89,7 @@ const [statsOpen, setStatsOpen] = useState(true);
 
     if (alreadyApplied) {
       alert("This job is already in Applied Jobs.");
-      return;
-    }
-
+const comments = window.prompt("Application Notes", "");
     const comments = window.prompt("Additional Comments", "");
 
     if (comments === null) return;

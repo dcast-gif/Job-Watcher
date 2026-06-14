@@ -637,7 +637,7 @@ const jobLocation = extractJobLocation(item.jobHtml);
 
 const pageTitle = getPageTitle(item.jobHtml, item.candidate.title);
 
-const locationTextToCheck = jobLocation || jobText;
+const locationTextToCheck = `${jobLocation} ${jobText}`;
 
 if (!locationMatchesText(locationTextToCheck, locations)) continue;
 

@@ -541,7 +541,7 @@ function deleteAppliedJob(job) {
       alignItems: "center"
     }}
   >
-    <span>{item.website}</span>
+  <span>{getWebsiteDisplayName(item.website)}</span>
     <span>{openDiagnostics[item.website] ? "⌃" : "⌄"}</span>
   </h3>
 

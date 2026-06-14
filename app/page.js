@@ -880,6 +880,27 @@ showAppliedFields
           )}
         </section>
       )}
+      <nav className="bottomNav">
+  <button onClick={() => goToPage("home")}>
+    <span>⌂</span>
+    Dashboard
+  </button>
+
+  <button onClick={() => goToPage("stored")}>
+    <span>⌕</span>
+    Search
+  </button>
+
+  <button onClick={() => goToPage("saved")}>
+    <span>☆</span>
+    Saved
+  </button>
+
+  <button onClick={() => goToPage("applied")}>
+    <span>✓</span>
+    Applications
+  </button>
+</nav>
     </main>
   );
 }

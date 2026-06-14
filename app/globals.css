@@ -522,9 +522,8 @@ select {
   justify-content: space-between;
   gap: 16px;
   align-items: flex-start;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
-
 .heroTop h2 {
   margin: 0 0 6px;
   font-size: 20px;

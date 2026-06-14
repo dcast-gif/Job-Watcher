@@ -451,28 +451,34 @@ const activeReviewCount = savedJobs.length + results.length;
     </div>
   </div>
 </section>
-          <section className="card">
-            <h2>Search</h2>
-            <p>
-              Search all saved terms across all saved websites. If location filters are
-              saved, results must also match at least one location.
-            </p>
+       <section className="searchActionCard">
+  <div className="searchActionLeft">
+    <div className="searchIconCircle">⌕</div>
 
-            <button onClick={runSearch} disabled={isSearching}>
-              {isSearching ? "Searching..." : "Run Search"}
-            </button>
+    <div>
+      <h2>Run Search</h2>
+      <p>
+        {terms.length} job titles • {locations.length} locations •{" "}
+        {websites.filter((website) => !disabledWebsites.includes(website)).length} websites
+      </p>
+    </div>
+  </div>
 
-            <button onClick={resetSearchState} style={{ marginTop: "10px" }}>
-              Reset Search State
-            </button>
+  <button className="searchNowButton" onClick={runSearch} disabled={isSearching}>
+    {isSearching ? "Searching..." : "Search Now →"}
+  </button>
 
-            <button
-              onClick={() => setShowDiagnostics(!showDiagnostics)}
-              style={{ marginTop: "10px" }}
-            >
-              {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
-            </button>
-          </section>
+  <button className="secondaryActionButton" onClick={resetSearchState}>
+    Reset Search State
+  </button>
+
+  <button
+    className="secondaryActionButton"
+    onClick={() => setShowDiagnostics(!showDiagnostics)}
+  >
+    {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
+  </button>
+</section>
 
   
 

@@ -711,7 +711,7 @@ select {
 }
 
 .heroStats {
-  gap: 12px;
+  gap: 8px;
   padding: 10px 0 12px;
 }
 

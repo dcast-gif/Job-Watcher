@@ -838,54 +838,79 @@ Checked URLs:
     )}
   </section>
 )}
-      {activePage === "applied" && (
-        <section className="card">
-          <h2>Applied Jobs ({appliedJobs.length})</h2>
-          <div className="statusSummary">
-  <span>Applied: {appliedJobs.filter((job) => job.status === "Applied").length}</span>
-  <span>Interview: {appliedJobs.filter((job) => job.status === "Interview").length}</span>
-  <span>Final Stage: {appliedJobs.filter((job) => job.status === "Final Stage").length}</span>
-  <span>Offer: {appliedJobs.filter((job) => job.status === "Offer").length}</span>
-  <span>Rejected: {appliedJobs.filter((job) => job.status === "Rejected").length}</span>
-</div>
+   {activePage === "applied" && (
+  <section className="savedPageCard">
+    <div className="pageSectionHeader">
+      <div>
+        <h2>Applications</h2>
+        <p>{appliedJobs.length} role{appliedJobs.length === 1 ? "" : "s"} tracked</p>
+      </div>
 
-          <button
-            onClick={() => exportJobs(appliedJobs, "job-dashboard-applied-jobs.csv")}
-            style={{ marginBottom: "10px" }}
-          >
-            Export Applied Jobs
-          </button>
+      <button onClick={() => exportJobs(appliedJobs, "job-dashboard-applied-jobs.csv")}>
+        Export
+      </button>
+    </div>
 
-          <button
-            onClick={() =>
-              exportJobs(
-                [...savedJobs, ...appliedJobs],
-                "job-dashboard-saved-and-applied-jobs.csv"
-              )
-            }
-            style={{ marginBottom: "16px" }}
-          >
-            Export Saved + Applied Jobs
-          </button>
+    <div className="applicationSummaryPills">
+      <span>Applied: {appliedJobs.filter((job) => job.status === "Applied").length}</span>
+      <span>Interview: {interviewCount}</span>
+      <span>Final: {finalStageCount}</span>
+      <span>Offers: {offerCount}</span>
+    </div>
 
-          {appliedJobs.length === 0 ? (
-            <p>No applied jobs yet.</p>
-          ) : (
-            <ResultsTable
-              results={appliedJobs}
-              savedJobs={savedJobs}
-              appliedJobs={appliedJobs}
-              onToggleSaved={toggleSavedJob}
-              onApplyJob={applyForJob}
-              onUpdateStatus={updateAppliedStatus}
-onUpdateComments={updateAppliedComments}
-onMoveAppliedToSaved={moveAppliedJobToSaved}
-onDeleteApplied={deleteAppliedJob}
-showAppliedFields
-            />
-          )}
-        </section>
-      )}
+    {appliedJobs.length === 0 ? (
+      <p>No applied jobs yet.</p>
+    ) : (
+      <div className="latestMatchesList">
+        {appliedJobs.map((job, index) => (
+          <div className="appliedMatchItem" key={`${job.url}-${index}`}>
+            <div className="companyLogoBox">
+              {getWebsiteDisplayName(job.website).slice(0, 2).toLowerCase()}
+            </div>
+
+            <div className="latestMatchInfo">
+              <a href={job.url} target="_blank" rel="noopener noreferrer">
+                {job.title}
+              </a>
+              <span>{getWebsiteDisplayName(job.website)}</span>
+              {job.salary && <small>{job.salary}</small>}
+
+              <div className="appliedMetaLine">
+                <span>{job.status || "Applied"}</span>
+                <span>{timeAgo(job.appliedAt)}</span>
+              </div>
+            </div>
+
+            <div className="appliedActions">
+              <select
+                value={job.status || "Applied"}
+                onChange={(event) => updateAppliedStatus(job, event.target.value)}
+              >
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Final Stage">Final Stage</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Offer">Offer</option>
+              </select>
+
+              <button onClick={() => updateAppliedComments(job)}>
+                Notes
+              </button>
+
+              <button onClick={() => moveAppliedJobToSaved(job)}>
+                Save
+              </button>
+
+              <button onClick={() => deleteAppliedJob(job)}>
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+)}
 
       {activePage === "audit" && (
         <section className="card">

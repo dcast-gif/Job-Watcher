@@ -558,6 +558,21 @@ select {
 
 .heroStats div {
   min-width: 0;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.heroStats .heroIcon {
+  grid-row: 1 / 4;
+  margin-bottom: 0;
+}
+
+.heroStats strong,
+.heroStats p,
+.heroStats small {
+  grid-column: 2;
 }
 
 .heroIcon {
@@ -762,6 +777,7 @@ select {
 
 .heroStats strong {
   font-size: 20px;
+  line-height: 1;
 }
 
 .heroStats p {

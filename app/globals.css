@@ -1542,10 +1542,19 @@ select {
 }
 
 .disabledWebsiteButton {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.disabledWebsiteButton:hover {
+  background: #fecaca;
+}
+
+.buttonGroup .smallButton:last-child {
   background: #f3f4f6;
   color: #6b7280;
 }
 
-.disabledWebsiteButton:hover {
+.buttonGroup .smallButton:last-child:hover {
   background: #e5e7eb;
 }

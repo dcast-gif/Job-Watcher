@@ -980,7 +980,37 @@ Checked URLs:
     </main>
   );
 }
+function Icon({ name }) {
+  const icons = {
+    home: (
+      <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" />
+    ),
+    search: (
+      <path d="M10.5 18a7.5 7.5 0 1 1 5.3-2.2L21 21" />
+    ),
+    saved: (
+      <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2 7.5 14 3 9.6l6.2-.9L12 3Z" />
+    ),
+    applications: (
+      <path d="M20 6 9 17l-5-5" />
+    )
+  };
 
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="appIcon"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {icons[name]}
+    </svg>
+  );
+}
 function StoredList({
   title,
   inputValue,

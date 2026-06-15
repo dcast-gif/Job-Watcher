@@ -1301,3 +1301,48 @@ select {
     color: #020617 !important;
   }
 }
+.savedPageCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.pageSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.pageSectionHeader h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.pageSectionHeader p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.pageSectionHeader button {
+  width: auto;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .savedPageCard {
+    background: #0f172a;
+    border-color: #1e293b;
+  }
+
+  .pageSectionHeader p {
+    color: #94a3b8;
+  }
+}

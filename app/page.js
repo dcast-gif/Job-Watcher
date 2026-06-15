@@ -1035,11 +1035,18 @@ function StoredList({
                       className="smallButton"
                       onClick={() => onToggleDisabled(item)}
                     >
-                      {disabledItems.includes(item) ? "Enable" : "Disable"}
+                      {disabledItems.includes(item) ? "Disabled" : "Enabled"}
                     </button>
                   )}
 
-                  <button className="smallButton" onClick={() => onDelete(item)}>
+               <button
+  className={`smallButton ${
+    disabledItems.includes(item)
+      ? "disabledWebsiteButton"
+      : "enabledWebsiteButton"
+  }`}
+  onClick={() => onToggleDisabled(item)}
+>
                     Delete
                   </button>
                 </div>

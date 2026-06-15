@@ -560,7 +560,7 @@ select {
   min-width: 0;
   display: grid;
   grid-template-columns: 30px 1fr;
-  column-gap: 10px;
+  column-gap: 6px;
   align-items: center;
 }
 
@@ -716,8 +716,8 @@ select {
 }
 
 .heroIcon {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 9px;
   background: #eef2ff;
   color: #2563eb;
@@ -727,8 +727,8 @@ select {
 }
 
 .heroIcon .appIcon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 .heroStats > div:nth-child(2) .heroIcon {
   background: #fff7ed;

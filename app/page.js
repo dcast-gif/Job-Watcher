@@ -438,21 +438,27 @@ const activeReviewCount = savedJobs.length + results.length;
 
   <div className="heroStats">
     <div>
-      <span className="heroIcon">💼</span>
+  <span className="heroIcon">
+  <Icon name="briefcase" />
+</span>
       <strong>{savedJobs.length}</strong>
       <p>Saved jobs</p>
       <small>{activeReviewCount} need review</small>
     </div>
 
     <div>
-      <span className="heroIcon">📅</span>
+    <span className="heroIcon">
+  <Icon name="calendar" />
+</span>
       <strong>{interviewCount}</strong>
       <p>Active interviews</p>
       <small>{interviewCount > 0 ? "Keep it up!" : "Keep applying"}</small>
     </div>
 
     <div>
-      <span className="heroIcon">📈</span>
+    <span className="heroIcon">
+  <Icon name="chart" />
+</span>
       <strong>{appliedJobs.length}</strong>
       <p>Applications</p>
       <small>This month</small>
@@ -993,7 +999,25 @@ function Icon({ name }) {
     ),
     applications: (
       <path d="M20 6 9 17l-5-5" />
-    )
+    ),
+    briefcase: (
+  <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 9h18v10H3V9Zm0 3h18" />
+),
+
+calendar: (
+  <path d="M7 3v4M17 3v4M4 7h16v14H4V7Zm0 4h16" />
+),
+
+chart: (
+  <>
+    <path d="M4 20h16" />
+    <path d="m6 15 4-4 3 2 5-6" />
+  </>
+),
+
+star: (
+  <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2 7.5 14 3 9.6l6.2-.9L12 3Z" />
+),
   };
 
   return (

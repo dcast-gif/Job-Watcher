@@ -957,7 +957,7 @@ Checked URLs:
     className={activePage === "stored" ? "bottomNavActive" : ""}
     onClick={() => goToPage("stored")}
   >
-    <span>⌕</span>
+   <span><Icon name="search" /></span>
     Search
   </button>
 
@@ -965,7 +965,7 @@ Checked URLs:
     className={activePage === "saved" ? "bottomNavActive" : ""}
     onClick={() => goToPage("saved")}
   >
-    <span>☆</span>
+ <span><Icon name="saved" /></span>
     Saved
   </button>
 
@@ -973,7 +973,7 @@ Checked URLs:
     className={activePage === "applied" ? "bottomNavActive" : ""}
     onClick={() => goToPage("applied")}
   >
-    <span>✓</span>
+   <span><Icon name="applications" /></span>
     Applications
   </button>
 </nav>

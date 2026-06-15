@@ -1425,3 +1425,77 @@ select {
     color: #cbd5e1;
   }
 }
+.storedHero {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.storedHero h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.storedHero p {
+  margin: 0 0 14px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.storedTabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.storedTabs button {
+  background: white;
+  color: #6b7280;
+  border-radius: 0;
+  padding: 12px 8px;
+  font-size: 12px;
+}
+
+.storedTabs button:not(:last-child) {
+  border-right: 1px solid #e5e7eb;
+}
+
+.storedTabs .storedTabActive {
+  background: #111827;
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .storedHero {
+    background: #0f172a;
+    border-color: #1e293b;
+  }
+
+  .storedHero p {
+    color: #94a3b8;
+  }
+
+  .storedTabs {
+    border-color: #1e293b;
+  }
+
+  .storedTabs button {
+    background: #0f172a;
+    color: #cbd5e1;
+  }
+
+  .storedTabs button:not(:last-child) {
+    border-right-color: #1e293b;
+  }
+
+  .storedTabs .storedTabActive {
+    background: #e5e7eb;
+    color: #020617;
+  }
+}

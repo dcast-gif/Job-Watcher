@@ -949,7 +949,7 @@ Checked URLs:
     className={activePage === "home" ? "bottomNavActive" : ""}
     onClick={() => goToPage("home")}
   >
-    <span>⌂</span>
+  <span><Icon name="home" /></span>
     Dashboard
   </button>
 

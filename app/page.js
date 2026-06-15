@@ -785,43 +785,59 @@ Checked URLs:
         </>
       )}
 
-      {activePage === "saved" && (
-        <section className="card">
-          <h2>Saved Jobs ({savedJobs.length})</h2>
+  {activePage === "saved" && (
+  <section className="savedPageCard">
+    <div className="pageSectionHeader">
+      <div>
+        <h2>Saved Jobs</h2>
+        <p>{savedJobs.length} saved role{savedJobs.length === 1 ? "" : "s"}</p>
+      </div>
 
-          <button
-            onClick={() => exportJobs(savedJobs, "job-dashboard-saved-jobs.csv")}
-            style={{ marginBottom: "10px" }}
-          >
-            Export Saved Jobs
-          </button>
+      <button onClick={() => exportJobs(savedJobs, "job-dashboard-saved-jobs.csv")}>
+        Export
+      </button>
+    </div>
 
-          <button
-            onClick={() =>
-              exportJobs(
-                [...savedJobs, ...appliedJobs],
-                "job-dashboard-saved-and-applied-jobs.csv"
-              )
-            }
-            style={{ marginBottom: "16px" }}
-          >
-            Export Saved + Applied Jobs
-          </button>
+    {savedJobs.length === 0 ? (
+      <p>No saved jobs yet.</p>
+    ) : (
+      <div className="latestMatchesList">
+        {savedJobs.map((job, index) => (
+          <div className="latestMatchItem" key={`${job.url}-${index}`}>
+            <div className="companyLogoBox">
+              {getWebsiteDisplayName(job.website).slice(0, 2).toLowerCase()}
+            </div>
 
-          {savedJobs.length === 0 ? (
-            <p>No saved jobs yet.</p>
-          ) : (
-            <ResultsTable
-              results={savedJobs}
-              savedJobs={savedJobs}
-              appliedJobs={appliedJobs}
-              onToggleSaved={toggleSavedJob}
-              onApplyJob={applyForJob}
-            />
-          )}
-        </section>
-      )}
+            <div className="latestMatchInfo">
+              <a href={job.url} target="_blank" rel="noopener noreferrer">
+                {job.title}
+              </a>
+              <span>{getWebsiteDisplayName(job.website)}</span>
+              {job.salary && <small>{job.salary}</small>}
+            </div>
 
+            <div className="latestMatchActions">
+              <button
+                className="latestSaveButton"
+                onClick={() => toggleSavedJob(job)}
+              >
+                ★
+              </button>
+
+              <span>{timeAgo(job.foundAt)}</span>
+
+              <button onClick={() => applyForJob(job)}>
+                {appliedJobs.some((appliedJob) => appliedJob.url === job.url)
+                  ? "Applied"
+                  : "Apply"}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+)}
       {activePage === "applied" && (
         <section className="card">
           <h2>Applied Jobs ({appliedJobs.length})</h2>

@@ -1532,3 +1532,20 @@ select {
     flex-shrink: 0;
   }
 }
+.enabledWebsiteButton {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.enabledWebsiteButton:hover {
+  background: #bbf7d0;
+}
+
+.disabledWebsiteButton {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.disabledWebsiteButton:hover {
+  background: #e5e7eb;
+}

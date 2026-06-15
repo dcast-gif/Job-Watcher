@@ -1346,3 +1346,82 @@ select {
     color: #94a3b8;
   }
 }
+.applicationSummaryPills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 14px;
+  padding-bottom: 2px;
+}
+
+.applicationSummaryPills span {
+  white-space: nowrap;
+  background: #eef2ff;
+  color: #2563eb;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.appliedMatchItem {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 10px;
+  background: white;
+}
+
+.appliedMetaLine {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.appliedMetaLine span {
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.appliedActions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.appliedActions select {
+  grid-column: 1 / -1;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.appliedActions button {
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .applicationSummaryPills span {
+    background: #1e293b;
+    color: #93c5fd;
+  }
+
+  .appliedMatchItem {
+    background: #0f172a;
+    border-color: #1e293b;
+  }
+
+  .appliedMetaLine span {
+    background: #1e293b;
+    color: #cbd5e1;
+  }
+}

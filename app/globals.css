@@ -559,7 +559,7 @@ select {
 .heroStats div {
   min-width: 0;
   display: grid;
-  grid-template-columns: 34px 1fr;
+  grid-template-columns: 30px 1fr;
   column-gap: 10px;
   align-items: center;
 }
@@ -711,7 +711,7 @@ select {
 }
 
 .heroStats {
-  gap: 8px;
+  gap: 12px;
   padding: 10px 0 12px;
 }
 
@@ -781,9 +781,10 @@ select {
 }
 
 .heroStats p {
-  font-size: 12px;
-  line-height: 1.2;
+  font-size: 11px;
+  line-height: 1.1;
   margin: 2px 0;
+  white-space: nowrap;
 }
 
 .heroStats small {

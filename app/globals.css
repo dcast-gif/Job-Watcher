@@ -733,6 +733,30 @@ select {
 .heroMessage span .appIcon {
   width: 18px;
   height: 18px;
+}
+
+.heroIcon .appIcon {
+  width: 18px;
+  height: 18px;
+}
+.heroStats > div:nth-child(2) .heroIcon {
+  background: #fff7ed;
+  color: #f59e0b;
+}
+
+.heroStats > div:nth-child(3) .heroIcon {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.heroMessage span {
+  background: #fff7ed;
+  color: #f59e0b;
+}
+
+.heroMessage span .appIcon {
+  width: 18px;
+  height: 18px;
 
 }
 

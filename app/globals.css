@@ -1499,3 +1499,36 @@ select {
     color: #020617;
   }
 }
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.listItem > span {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.buttonGroup {
+  align-items: center;
+}
+
+.buttonGroup .smallButton {
+  min-width: auto;
+  padding: 8px 10px;
+  font-size: 12px;
+  border-radius: 10px;
+}
+
+@media (max-width: 700px) {
+  .listItem {
+    align-items: center;
+  }
+
+  .buttonGroup {
+    flex-shrink: 0;
+  }
+}

@@ -451,7 +451,7 @@ const activeReviewCount = savedJobs.length + results.length;
   <Icon name="calendar" />
 </span>
       <strong>{interviewCount}</strong>
-      <p>Active interviews</p>
+      <p>Interviews</p>
       <small>{interviewCount > 0 ? "Keep it up!" : "Keep applying"}</small>
     </div>
 

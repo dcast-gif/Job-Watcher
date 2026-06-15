@@ -1558,3 +1558,7 @@ select {
 .buttonGroup .smallButton:last-child:hover {
   background: #e5e7eb;
 }
+.appIcon {
+  width: 24px;
+  height: 24px;
+}

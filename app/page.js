@@ -898,7 +898,7 @@ Checked URLs:
               </button>
 
               <button onClick={() => moveAppliedJobToSaved(job)}>
-                Save
+                Move to Saved
               </button>
 
               <button onClick={() => deleteAppliedJob(job)}>

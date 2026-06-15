@@ -717,74 +717,85 @@ Checked URLs:
         </>
       )}
 
-      {activePage === "stored" && (
-        <>
-          <section className="card">
-            <h2>Stored Info</h2>
+   {activePage === "stored" && (
+  <>
+    <section className="storedHero">
+      <h2>Stored Info</h2>
+      <p>Manage your saved job titles, websites and locations for smarter searches.</p>
 
-            <div className="tabBar">
-              <button onClick={() => setStoredTab("terms")}>
-                Job Titles ({terms.length})
-              </button>
-              <button onClick={() => setStoredTab("websites")}>
-                Websites ({websites.length})
-              </button>
-              <button onClick={() => setStoredTab("locations")}>
-                Locations ({locations.length})
-              </button>
-            </div>
-          </section>
+      <div className="storedTabs">
+        <button
+          className={storedTab === "terms" ? "storedTabActive" : ""}
+          onClick={() => setStoredTab("terms")}
+        >
+          💼 Job Titles
+        </button>
 
-          {storedTab === "terms" && (
-            <StoredList
-              title="Job Titles"
-              inputValue={termInput}
-              onInputChange={setTermInput}
-              placeholder="e.g. Management Accountant"
-              saveLabel="Save Job Title"
-              onSave={saveTerm}
-              items={terms}
-              onDelete={deleteTerm}
-              emptyMessage="No terms saved yet."
-            />
-          )}
+        <button
+          className={storedTab === "websites" ? "storedTabActive" : ""}
+          onClick={() => setStoredTab("websites")}
+        >
+          🌐 Websites
+        </button>
 
-          {storedTab === "websites" && (
-            <StoredList
-              title="Websites"
-              inputValue={websiteInput}
-              onInputChange={setWebsiteInput}
-              extraInputValue={websiteNicknameInput}
-              onExtraInputChange={setWebsiteNicknameInput}
-              extraPlaceholder="Nickname, e.g. Sony Music"
-              placeholder="e.g. careers.umusic.com"
-              saveLabel="Save Website"
-              onSave={saveWebsite}
-              items={websites}
-              onDelete={deleteWebsite}
-              emptyMessage="No websites saved yet."
-              isWebsiteList
-              disabledItems={disabledWebsites}
-              onToggleDisabled={toggleWebsiteDisabled}
-            />
-          )}
+        <button
+          className={storedTab === "locations" ? "storedTabActive" : ""}
+          onClick={() => setStoredTab("locations")}
+        >
+          📍 Locations
+        </button>
+      </div>
+    </section>
 
-          {storedTab === "locations" && (
-            <StoredList
-              title="Location Filters"
-              inputValue={locationInput}
-              onInputChange={setLocationInput}
-              placeholder="e.g. London"
-              saveLabel="Save Location"
-              onSave={saveLocation}
-              items={locations}
-              onDelete={deleteLocation}
-              emptyMessage="No location filters saved yet."
-            />
-          )}
-        </>
-      )}
+    {storedTab === "terms" && (
+      <StoredList
+        title="Job Titles"
+        inputValue={termInput}
+        onInputChange={setTermInput}
+        placeholder="e.g. Management Accountant"
+        saveLabel="+ Add Job Title"
+        onSave={saveTerm}
+        items={terms}
+        onDelete={deleteTerm}
+        emptyMessage="No job titles saved yet."
+      />
+    )}
 
+    {storedTab === "websites" && (
+      <StoredList
+        title="Websites"
+        inputValue={websiteInput}
+        onInputChange={setWebsiteInput}
+        extraInputValue={websiteNicknameInput}
+        onExtraInputChange={setWebsiteNicknameInput}
+        extraPlaceholder="Nickname, e.g. Sony Music"
+        placeholder="e.g. careers.umusic.com"
+        saveLabel="+ Add Website"
+        onSave={saveWebsite}
+        items={websites}
+        onDelete={deleteWebsite}
+        emptyMessage="No websites saved yet."
+        isWebsiteList
+        disabledItems={disabledWebsites}
+        onToggleDisabled={toggleWebsiteDisabled}
+      />
+    )}
+
+    {storedTab === "locations" && (
+      <StoredList
+        title="Locations"
+        inputValue={locationInput}
+        onInputChange={setLocationInput}
+        placeholder="e.g. London"
+        saveLabel="+ Add Location"
+        onSave={saveLocation}
+        items={locations}
+        onDelete={deleteLocation}
+        emptyMessage="No locations saved yet."
+      />
+    )}
+  </>
+)}
   {activePage === "saved" && (
   <section className="savedPageCard">
     <div className="pageSectionHeader">

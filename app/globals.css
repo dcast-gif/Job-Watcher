@@ -701,14 +701,39 @@ select {
 }
 
 .heroIcon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
   background: #eef2ff;
+  color: #2563eb;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
   margin-bottom: 6px;
+}
+
+.heroIcon .appIcon {
+  width: 18px;
+  height: 18px;
+}
+.heroStats > div:nth-child(2) .heroIcon {
+  background: #fff7ed;
+  color: #f59e0b;
+}
+
+.heroStats > div:nth-child(3) .heroIcon {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.heroMessage span {
+  background: #fff7ed;
+  color: #f59e0b;
+}
+
+.heroMessage span .appIcon {
+  width: 18px;
+  height: 18px;
+}
 }
 
 .heroStats strong {

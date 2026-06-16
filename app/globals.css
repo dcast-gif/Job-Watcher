@@ -1628,3 +1628,59 @@ select {
   width: 24px;
   height: 24px;
 }
+@media (prefers-color-scheme: dark) {
+  .savedPageCard {
+    background: #0f172a !important;
+    border-color: #1e293b !important;
+    color: #e5e7eb !important;
+  }
+
+  .pageSectionHeader h2 {
+    color: #e5e7eb !important;
+  }
+
+  .pageSectionHeader p {
+    color: #94a3b8 !important;
+  }
+
+  .savedPageCard .latestMatchItem,
+  .savedPageCard .appliedMatchItem {
+    background: #111827 !important;
+    border-color: #334155 !important;
+  }
+
+  .savedPageCard .latestMatchInfo a {
+    color: #e5e7eb !important;
+  }
+
+  .savedPageCard .latestMatchInfo span,
+  .savedPageCard .latestMatchInfo small,
+  .savedPageCard .latestMatchActions span,
+  .savedPageCard .appliedMetaLine span {
+    color: #94a3b8 !important;
+  }
+
+  .savedPageCard .latestSaveButton {
+    background: #0f172a !important;
+    color: #e5e7eb !important;
+    border-color: #475569 !important;
+  }
+
+  .savedPageCard .latestMatchActions button:not(.latestSaveButton),
+  .savedPageCard .appliedActions button,
+  .savedPageCard .pageSectionHeader button {
+    background: #e5e7eb !important;
+    color: #020617 !important;
+  }
+
+  .savedPageCard select {
+    background: #020617 !important;
+    color: #e5e7eb !important;
+    border-color: #475569 !important;
+  }
+
+  .applicationSummaryPills span {
+    background: #1e293b !important;
+    color: #93c5fd !important;
+  }
+}

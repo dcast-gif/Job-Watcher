@@ -1137,8 +1137,7 @@ function StoredList({
 
                <button
   className="smallButton"
-  onClick={() => onToggleDisabled(item)}
->
+  onClick={() => onDelete(item)}
                     Delete
                   </button>
                 </div>

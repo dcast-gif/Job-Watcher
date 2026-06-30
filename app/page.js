@@ -759,9 +759,13 @@ Checked URLs:
 
    {activePage === "stored" && (
   <>
-    <section className="storedHero">
-      <h2>Stored Info</h2>
-      <p>Manage your saved job titles, websites and locations for smarter searches.</p>
+<section className="storedHero">
+  <h2>Stored Info</h2>
+  <p>Manage your saved job titles, websites and locations for smarter searches.</p>
+
+  <button onClick={exportStoredInfo}>
+    Export Stored Info
+  </button>
 
       <div className="storedTabs">
         <button

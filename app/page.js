@@ -222,7 +222,41 @@ function deleteAppliedJob(job) {
 
     URL.revokeObjectURL(url);
   }
+function exportStoredInfo() {
+  const websiteNames = JSON.parse(
+    localStorage.getItem("jobWatcherWebsiteNames") || "{}"
+  );
 
+  const data = {
+    jobTitles: terms,
+    websites,
+    websiteNames,
+    disabledWebsites,
+    locations,
+    exportedAt: new Date().toISOString()
+  };
+
+  const text = [
+    "JOB TITLES",
+    ...terms,
+    "",
+    "WEBSITES",
+    ...websites.map((website) => `${getWebsiteDisplayName(website)} - ${website}`),
+    "",
+    "LOCATIONS",
+    ...locations
+  ].join("\n");
+
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "job-watcher-stored-info.txt";
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
   function saveTerm() {
     const cleanTerm = termInput.trim();
     if (!cleanTerm || terms.includes(cleanTerm)) return;
